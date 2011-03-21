@@ -1,0 +1,10 @@
+SCRAPBOOK CREAMY
+
+  /**
+   * Get extension of a file
+   */
+  public static function extension($file) {
+    $path_parts = pathinfo($file);
+    return $path_parts['extension'];
+  }
+
