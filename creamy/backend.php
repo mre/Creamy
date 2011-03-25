@@ -1,7 +1,7 @@
 <?php
 
 require_once("config.php");
-require_once("file.php");
+require_once("template.php");
 
 /**
  * Class for static html content of backend.
@@ -9,24 +9,14 @@ require_once("file.php");
 class Backend {
 
   /**
-   * Show static part of a website 
+   * Show part of page using the provided template file.
    */
-  private static function part($name) {
-    $root = File::path(".");
-    $relative_path = Config::$creamy_dir . "/" . Config::$theme_dir;
-    $theme_path = $root . "/" . $relative_path;
-    $file = $theme_path . "/" . $name . Config::$part_extension;
-    print(File::read($file));
-  }
-
-  /**
-   * Print status information of current user 
-   */
-  private static function show_status() { 
-    ?>
-      <p>You are logged in as <?php echo($_SESSION['username']); ?></p>
-      <p><a href="?logout=1">Logout</a></p>
-    <?php
+  private function show_part($template_file, $values = array()) {
+    $template = new Template($template_file . Config::$template_extension);
+    foreach ( $values as $name => $value ) {
+      $template->Set($name, $value);
+    }
+    echo $template->Display();
   }
 
   /**
@@ -43,20 +33,20 @@ class Backend {
   /**
    * Login page
    */
-  public static function show_login() {
-    self::part("header");
-    self::part("login");
-    self::part("footer");
+  public function show_login() {
+    $this->show_part("header", array("title" => "Creamy Login"));
+    $this->show_part("login");
+    $this->show_part("footer");
   }
 
   /**
    * Admin page
    */
-  public static function showBackend() {
-    self::part("header");
-    self::show_status();
-    self::list_contents();
-    self::part("footer");
+  public function showBackend() {
+    $this->show_part("header", array("title" => "Creamy"));
+    $this->show_part("status");
+    $this->list_contents();
+    $this->show_part("footer");
   }
 }
 ?>

@@ -17,6 +17,9 @@ class Config {
   // Extension for content files
   static $extension = ".mkdn";
 
+  // Using plain php files for templates
+  static $template_extension = ".php"; 
+
   // Extension for html parts (like header, footer...)
   static $part_extension = ".html";
 

@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 // Load necessary classes.
 require_once("creamy/includes.php");
 
@@ -51,15 +52,17 @@ class Creamy {
    * Call to administration backend
    */
   public static function administration() {
-    session_start();
+
     $user = new User();
     $user->check_logout();
     $user->check_login();
 
+    $backend = new Backend();
+
     if ($user->logged_in())
-      Backend::show_backend();
+      $backend->show_backend();
     else
-      Backend::show_login();
+      $backend->show_login();
   }
 }
 

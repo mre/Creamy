@@ -39,7 +39,7 @@
 
    require_once("config.php");
    require_once("file.php");
-   require('cache.php'); // disable if you don't want caching
+   // require_once('cache.php'); // enable if you want caching
    
    // enable / disable debugging mode, this will cause problems with doctype and trigger quirks mode so best used as quick test
    define('TEMPLATE_DEBUG', false);
@@ -63,15 +63,16 @@
       protected $aCacheConditions = array();
       protected $iCacheLength;
       protected $oCache = null;
-      
-      public function __construct($sTemplate, $iCacheLength = TEMPLATE_CACHE_LENGTH, $bDebug = TEMPLATE_DEBUG) {
-         $this->sTemplate = $sTemplate;
 
+      private function GetTemplatePath() {
          $root = File::path(".");
          $relative_path = Config::$creamy_dir . "/" . Config::$theme_dir;
-         $template_path = $root . "/" . $relative_path;
-         $this->sTemplatePath = $template_path;
+         return ($root . "/" . $relative_path . "/");
+      } 
 
+      public function __construct($sTemplate, $iCacheLength = TEMPLATE_CACHE_LENGTH, $bDebug = TEMPLATE_DEBUG) {
+         $this->sTemplate = $sTemplate;
+         $this->sTemplatePath = $this->GetTemplatePath(); 
          $this->bDebug = $bDebug;
          $this->bCacheSupport = class_exists('PhpCache');
          $this->iCacheLength = $iCacheLength;
