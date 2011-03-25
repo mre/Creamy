@@ -42,9 +42,9 @@ class Backend {
   /**
    * Admin page
    */
-  public function showBackend() {
+  public function show_backend() {
     $this->show_part("header", array("title" => "Creamy"));
-    $this->show_part("status");
+    $this->show_part("status", array("user" => $_SESSION['username']));
     $this->list_contents();
     $this->show_part("footer");
   }

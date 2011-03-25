@@ -25,7 +25,7 @@ class User {
     // Login process. Check user credentials.
     $password = Config::$userinfo[$_POST['username']];
     if ($password != '' && $password == $_POST['password']) {
-      session_regenerate_id();
+      // session_regenerate_id();
       $_SESSION['username'] = $_POST['username']; // Valid login
     }
   }
@@ -33,8 +33,7 @@ class User {
   public function check_logout() {
     if (isset($_GET['logout'])) {
       session_destroy();
-      //$_SESSION['username'] = '';
-      header('Location:  ' . $_SERVER['PHP_SELF']);
+      // header('Location:  ' . $_SERVER['PHP_SELF']);
     }
   }
 }
