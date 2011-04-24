@@ -66,7 +66,7 @@
 
       private function GetTemplatePath() {
          $root = File::path(".");
-         $relative_path = Config::$creamy_dir . "/" . Config::$theme_dir;
+         $relative_path =  "/" . Config::$theme_dir;
          return ($root . "/" . $relative_path . "/");
       } 
 

@@ -1,8 +1,15 @@
 <?php
 
-session_start();
 // Load necessary classes.
-require_once("creamy/includes.php");
+require_once("creamy/config.php");
+require_once("creamy/file.php");
+require_once("creamy/markdown/markdown.php");
+
+// Check if backend got called.
+if(!Creamy::is_included()) {
+  // Redirect to backend
+  header("Location: creamy/");
+}
 
 /**
  * This is the main class of creamy, a simple content
@@ -45,29 +52,8 @@ class Creamy {
    */
   public static function show_content($name) {
     $fullname = $name . Config::$extension;
-    echo(Markdown(htmlentities(File::read($fullname))));
-  }
-
-  /**
-   * Call to administration backend
-   */
-  public static function administration() {
-
-    $user = new User();
-    $user->check_logout();
-    $user->check_login();
-
-    $backend = new Backend();
-
-    if ($user->logged_in())
-      $backend->show_backend();
-    else
-      $backend->show_login();
+    echo(Markdown(File::read($fullname)));
   }
 }
-
-// Check if backend got called.
-if(!Creamy::is_included())
-  Creamy::administration();
 
 ?>

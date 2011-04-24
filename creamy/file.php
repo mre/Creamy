@@ -8,14 +8,17 @@ class File {
   /**
    * Read raw file content.
    */
-  public static function read($name) {
+  public static function read($filename) {
     $content = ""; 
 
-    // Only read files with a given extension.
-    $filename = $name . Config::$extension;
-    $f = fopen($name, 'r');
+    // File must exist
+    if(!file_exists($filename))
+      return $content;
+
+    // File exists. Open and read.
+    $f = fopen($filename, 'r');
     if($f != null) {
-      $filesize = filesize($name);
+      $filesize = filesize($filename);
       if($filesize != 0)
         $content = fread($f, $filesize);
     }

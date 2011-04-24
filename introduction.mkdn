@@ -10,11 +10,11 @@ A file-based content management system as simple as Perch.
 
 2. Upload `creamy.php` and the `creamy` folder to your server.
 
-3. Call creamy within your static pages:
+3. Call creamy within your static pages:  
     `<?php include("creamy.php"); ?>`
 
-4. Create a content block wherever you want:
-    `<?php Creamy::content("header"); ?>`
+4. Create a content block wherever you want:  
+    `<?php Creamy::content("header"); ?>`  
     `<?php Creamy::content("news"); ?>`
 
 5. Open the backend at `example.com/creamy.php` and edit the content.
@@ -38,7 +38,7 @@ named `plugins`. See example plugins for details.
 
 ## Copyright
 
-Copyright (C) 2011 Matthias Endler
+Copyright (C) 2011 Matthias Endler  
 http://www.matthias-endler.de
 
 ## License

@@ -13,7 +13,7 @@ A file-based content management system as simple as Perch.
 3. Call creamy within your static pages:
     `<?php include("creamy.php"); ?>`
 
-4. Create a content block wherever you want:
+4. Create a content block (an editable region) wherever you want:
     `<?php Creamy::content("header"); ?>`
     `<?php Creamy::content("news"); ?>`
 
@@ -21,6 +21,13 @@ A file-based content management system as simple as Perch.
    Creamy will put the content inside a `blockname_creamy.mkdn` file
    so you can also edit these markdown files directly with your 
    favorite text editor.
+
+## FAQ
+
+Q: Why not use perch?
+A: Creamy is free software. You can modify it to your heart's content.
+Furthermore it's file based. That means you can manage and backup your
+site with a text editor and version control and make diffs to see changes.
 
 ## Extensions
 
