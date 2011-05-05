@@ -17,8 +17,8 @@ A file-based content management system as simple as Perch.
     `<?php Creamy::content("header"); ?>`
     `<?php Creamy::content("news"); ?>`
 
-5. Open the backend at `example.com/creamy.php` and edit the content.
-   Creamy will put the content inside a `blockname_creamy.mkdn` file
+5. Open the backend at `example.com/creamy` and edit the content blocks.
+   Creamy will put the content inside a `contentblock.mkdn` file
    so you can also edit these markdown files directly with your 
    favorite text editor.
 
@@ -28,6 +28,7 @@ Q: Why not use perch?
 A: Creamy is free software. You can modify it to your heart's content.
 Furthermore it's file based. That means you can manage and backup your
 site with a text editor and version control and make diffs to see changes.
+You don't need a database to run it.
 
 ## Extensions
 
@@ -36,7 +37,7 @@ site with a text editor and version control and make diffs to see changes.
 You can put code snippets that you use regularly into a folder called
 `theme` (relative to `creamy.php`). Creamy will recognize all content 
 blocks within this folder automatically. So if you have a file called
-`footer.html` the commmand `<?php content("footer"); ?>` works as expected.
+`footer.html` the commmand `<?php Creamy::content("footer"); ?>` works as expected.
 
 ### Plugins
 

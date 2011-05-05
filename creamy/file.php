@@ -21,10 +21,22 @@ class File {
       $filesize = filesize($filename);
       if($filesize != 0)
         $content = fread($f, $filesize);
+      fclose($f);
     }
-    fclose($f);
-
     return $content;
+  }
+
+  /**
+   * Write raw file content.
+   */
+  public static function write($filename, $content) {
+    $f = fopen($filename, 'w');
+    if($f != null) {
+      fwrite($f, $content);
+      fclose($f);
+      return true;
+    }
+    return false;
   }
 
   /**

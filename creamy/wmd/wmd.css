@@ -1,7 +1,3 @@
-body 
-{ 
-	background-color: White
-}
 
 .wmd-panel
 {
@@ -16,28 +12,18 @@ body
 	background-color: Aquamarine;
 }
 
-#wmd-button-bar 
-{
-	width: 100%;
-	background-color: Silver; 
-}
-
 #wmd-input 
 { 
 	height: 500px;
-	width: 100%;
-	background-color: Gainsboro;
-	border: 1px solid DarkGray;
+  width: 100%;
+	background-color: WhiteSmoke;
+	border: none;
 }
 
 #wmd-preview 
 { 
-	background-color: LightSkyBlue; 
-}
-
-#wmd-output 
-{ 
-	background-color: Pink;
+  margin-top: 10px;
+	background-color: WhiteSmoke;
 }
 
 #wmd-button-row 
@@ -106,8 +92,7 @@ body
 #wmd-button-bar #wmd-spacer3        {left: 300px;}
 #wmd-button-bar #wmd-undo-button    {left: 325px; background-position: -200px 0;}
 #wmd-button-bar #wmd-redo-button    {left: 350px; background-position: -220px 0;}
-#wmd-button-bar #wmd-help-button    {right: 0px; background-position: -240px 0;}
-
+#wmd-button-bar #wmd-help-button    {right: 0px; background-position: -240px 0; display:none;}
 
 .wmd-prompt-background
 {
