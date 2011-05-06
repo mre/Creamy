@@ -14,7 +14,6 @@ A file-based content management system as simple as Perch.
     `<?php include("creamy.php"); ?>`
 
 4. Create a content block (an editable region) wherever you want:
-    `<?php Creamy::content("header"); ?>`
     `<?php Creamy::content("news"); ?>`
 
 5. Open the backend at `example.com/creamy` and edit the content blocks.
@@ -37,19 +36,19 @@ You don't need a database to run it.
 You can put code snippets that you use regularly into a folder called
 `theme` (relative to `creamy.php`). Creamy will recognize all content 
 blocks within this folder automatically. So if you have a file called
-`footer.html` the commmand `<?php Creamy::content("footer"); ?>` works as expected.
+`footer.php` the commmand `<?php Creamy::theme("footer"); ?>` works as expected.
 
-### Plugins
+### Plugins (not yet implemented)
 
 Additional functionality can be added by putting a file inside a folder
 named `plugins`. See example plugins for details.
 
 ## Copyright
 
-Copyright (C) 2011 Matthias Endler
+Copyright (C) 2011 Matthias Endler  
 http://www.matthias-endler.de
 
 ## License
 
-GNU General Public License version 3. 
+GNU General Public License version 3.  
 See LICENSE.txt for details.

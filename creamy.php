@@ -4,6 +4,7 @@
 require_once("creamy/config.php");
 require_once("creamy/file.php");
 require_once("creamy/markdown/markdown.php");
+require_once("creamy/backend.php");
 
 // Check if backend got called.
 if(!Creamy::is_included()) {
@@ -40,9 +41,19 @@ class Creamy {
   }
 
   /**
+   * If this function is called from the frontend
+   * it returns a template.
+   */
+  public static function theme($name, $values = array()) {
+    $backend = new Backend();
+    $backend->show_part($name, $values);
+  }
+
+
+  /**
    * If the content file does not exist, create it.
    */
-  public static function init_content($name) {
+  private static function init_content($name) {
       $fullname = $name . Config::$extension;
       File::create($fullname);
   }
@@ -50,7 +61,7 @@ class Creamy {
   /**
    * Present content on page.
    */
-  public static function show_content($name) {
+  private static function show_content($name) {
     $fullname = $name . Config::$extension;
     echo(Markdown(File::read($fullname)));
   }

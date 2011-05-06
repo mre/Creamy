@@ -11,7 +11,7 @@ if (isset($_POST["submit"])) {
     File::write($file, $content);
 
     $backend = new Backend();
-    $backend->show_part("header", array("title" => "Edit file '" . $file . "' | Creamy"));
+    $backend->show_part("header", array("title" => "Saved file '" . $file . "' | Creamy"));
     $backend->show_part("menu", array("user" => $_SESSION['username']));
     print("File written. <a href='backend.php'>Back</a>");
     $backend->show_part("footer");

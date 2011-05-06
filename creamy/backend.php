@@ -22,10 +22,18 @@ class Backend {
    * Show part of page using the provided template file.
    */
   public function show_part($template_file, $values = array()) {
-    $template = new Template($template_file . Config::$template_extension);
+    // Construct template name
+    $template_name = $template_file . Config::$template_extension;
+
+    // Load template
+    $template = new Template($template_name);
+
+    // Set placeholders in template with given values
     foreach ( $values as $name => $value ) {
       $template->Set($name, $value);
     }
+
+    // Show output
     echo $template->Display();
   }
 
