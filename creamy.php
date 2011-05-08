@@ -19,15 +19,6 @@ if(!Creamy::is_included()) {
 class Creamy {
 
   /**
-   * Check if this script was included by another script.
-   */
-  public static function is_included() {
-    $current_script = File::path($_SERVER['SCRIPT_FILENAME']);
-    $this_file = File::path(__FILE__);
-    return ( $current_script !=  $this_file );
-  }
-
-  /**
    * If this function is called from the frontend
    * it returns the parsed content to the calling page.
    */
@@ -49,6 +40,14 @@ class Creamy {
     $backend->show_part($name, $values);
   }
 
+  /**
+   * Check if this script was included by another script.
+   */
+  public static function is_included() {
+    $current_script = File::path($_SERVER['SCRIPT_FILENAME']);
+    $this_file = File::path(__FILE__);
+    return ( $current_script !=  $this_file );
+  }
 
   /**
    * If the content file does not exist, create it.
@@ -66,5 +65,4 @@ class Creamy {
     echo(Markdown(File::read($fullname)));
   }
 }
-
 ?>

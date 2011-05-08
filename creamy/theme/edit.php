@@ -1,12 +1,14 @@
 <form id="post-form" action="editor.php" method="post">
-  <div class="wmd-panel">
-    <div id="wmd-button-bar" ></div>
-    <textarea id="wmd-input" name="post-text"><?=$content?></textarea>
-
-    <div id="wmd-preview"></div>
+  <div class="editor-head">
+    <div id="wmd-button-bar" class="left"></div>
+    <input class="button" id="submit-button" type="submit" name="submit" value="Save"></input>
   </div>
-
-  <div class="form-submit">
-    <input id="submit-button" type="submit" name="submit" value="Save">
+  <div class="editor-view">
+    <div class="panel left">
+      <textarea id="wmd-input" name="post-text"><?=$content?></textarea>
+    </div>
+    <div class="panel right" id="wmd-preview"></div>
+    <div class="clear"></div>
+  </div>
 </form>
 <script type="text/javascript" src="wmd/wmd.js"></script>

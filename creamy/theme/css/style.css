@@ -1,3 +1,86 @@
+* { margin: 0; padding: 0; }
+
 body {
-  font-size: 1.3em;
+  font-family: Tahoma,Geneva,Kalimati,sans-serif;
+}
+
+.head {
+  padding: 10px;
+  border-bottom: red 1px solid;
+}
+
+.menu {
+  width: 100%;
+}
+
+.menu li{
+  display: inline;
+  float: left;
+  list-style: none;
+  list-style-type: none;
+  padding: 20px;
+}
+
+.menu a {
+  padding: 5px;
+
+}
+
+.editor-view {
+  min-height: 500px;
+}
+
+.panel {
+  width: 49%;
+  height: 500px;
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.button { 
+  color: #777777; 
+  font-size: 1.1em; 
+  padding: 0px 4px 2px 4px; 
+  border: 1px solid #CCCCCC; 
+  cursor: pointer;
+  background-color: WhiteSmoke; 
+  color: #333; 
+  text-decoration: none;
+  padding: 0px 4px 2px 4px;
+}
+
+.button:hover { 
+  color: black; 
+  background-color: white ; 
+}
+
+.editor-head .button {
+  margin-top: 7px;
+}
+
+.footer {
+  background-color: white;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+  font-size: 80%;
+  padding: 10px 0 10px 0;
+  border-top: 1px solid red;
+  color: #555;
 }

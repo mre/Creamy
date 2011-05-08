@@ -9,10 +9,10 @@
 <meta name="author" content="Matthias Endler" />
 <meta name="revisit-After" content="10 days" />
 <meta name="distribution" content="global" />
-<title><?=$title?></title>
+<title><?=$title?> | Creamy</title>
 <link rel="icon" href="favicon.ico" type="image/ico" />
-<link rel="stylesheet" type="text/css" href="theme/css/style.css" />
 <link rel="stylesheet" type="text/css" href="wmd/wmd.css" />
+<link rel="stylesheet" type="text/css" href="theme/css/style.css" />
 
 </head>
 <body>

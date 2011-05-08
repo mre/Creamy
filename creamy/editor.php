@@ -4,18 +4,26 @@ session_start();
 require_once("backend.php");
 require_once("file.php");
 
+    print $_POST["post-text"];
 // Check if file has been modified
 if (isset($_POST["submit"])) {
     $file = $_SESSION["file"];
     $content = $_POST["post-text"];
-    File::write($file, $content);
+    if (File::write($file, $content)) {
+      $status = "File written. ";
+    } else {
+      $status = "An error occured while writing. ";
+    }
 
     $backend = new Backend();
     $backend->show_part("header", array("title" => "Saved file '" . $file . "' | Creamy"));
     $backend->show_part("menu", array("user" => $_SESSION['username']));
-    print("File written. <a href='backend.php'>Back</a>");
+    print($status);
+    print("<a href='index.php'>Back</a>");
     $backend->show_part("footer");
+
 } else {
+
   // Read file that should be edited
   if (isset($_GET["file"])) {
     $file = $_GET["file"];
@@ -24,9 +32,11 @@ if (isset($_POST["submit"])) {
     $_SESSION["file"] = $file;
 
     $content = File::read($file);
+    $status = "Editing file " . $file;
+
     $backend = new Backend();
-    $backend->show_part("header", array("title" => "Edit file '" . $file . "' | Creamy"));
-    $backend->show_part("menu", array("user" => $_SESSION['username']));
+    $backend->show_part("header", array("title" => $status));
+    $backend->show_part("menu", array("user" => $_SESSION['username'], "status" => $status));
     $backend->show_part("edit", array("content" => $content));
     $backend->show_part("footer");
   }

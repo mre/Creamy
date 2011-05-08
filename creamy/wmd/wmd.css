@@ -1,10 +1,6 @@
-
-.wmd-panel
-{
-	margin-left: 25%;
-	margin-right: 25%;
-	width: 50%;
-	min-width: 500px;
+.editor-head {
+  margin-top: 20px;
+  height: 50px;
 }
 
 #wmd-editor
@@ -14,16 +10,16 @@
 
 #wmd-input 
 { 
-	height: 500px;
-  width: 100%;
 	background-color: WhiteSmoke;
 	border: none;
+  width: 100%;
+  height: 100%;
 }
 
 #wmd-preview 
 { 
-  margin-top: 10px;
 	background-color: WhiteSmoke;
+  height: 100%;
 }
 
 #wmd-button-row 
@@ -70,11 +66,14 @@
 	height: 20px; 
 	margin-left: 5px;
 	margin-right: 5px;
-	
 	position: absolute;
 	display: inline-block; 
 }
 
+#wmd-button-bar {
+  width: 400px;
+  height: 30px;
+}
 
 /* sprite button slicing style information */
 #wmd-button-bar #wmd-bold-button    {left: 0px;   background-position: 0px 0;}
