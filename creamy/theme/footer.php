@@ -1,3 +1,5 @@
-<div class="footer">Creamy &ndash; A deliciously simple CMS. &copy; by Matthias Endler</div>
+</div><!-- Centered -->
+
+<div class="footer">Creamy &ndash; A deliciously simple CMS.</div>
 </body>
 </html>

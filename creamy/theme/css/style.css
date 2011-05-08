@@ -1,11 +1,39 @@
-* { margin: 0; padding: 0; }
+/* CSS Mini Reset */
+
+html, body, div, form, fieldset, legend, label
+{
+ margin: 0;
+ padding: 0; 
+}
+
+table
+{
+ border-collapse: collapse;
+ border-spacing: 0;
+}
+
+th, td
+{
+ text-align: left;
+ vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6, th, td, caption { font-weight:normal; }
+
+img { border: 0; }
 
 body {
   font-family: Tahoma,Geneva,Kalimati,sans-serif;
 }
 
+a {
+  color: red;
+}
+
 .head {
+  width: 100%;
   padding: 10px;
+  margin-bottom: 20px;
   border-bottom: red 1px solid;
 }
 
@@ -23,7 +51,12 @@ body {
 
 .menu a {
   padding: 5px;
+}
 
+.centered {
+  margin: auto;
+  width: 980px;
+  
 }
 
 .editor-view {
@@ -75,7 +108,7 @@ body {
 
 .footer {
   background-color: white;
-  position: absolute;
+  position: fixed;
   width: 100%;
   bottom: 0;
   text-align: center;
@@ -83,4 +116,74 @@ body {
   padding: 10px 0 10px 0;
   border-top: 1px solid red;
   color: #555;
+}
+
+.content-list {
+  width: 100%;
+}
+
+.content-list a {
+  text-decoration: none;
+}
+
+table {
+  border: 1px solid red;
+}
+
+table th {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  font-size: 120%;
+}
+
+table tr {
+  padding: 10px;
+  border: 1px solid red;
+}
+
+table td {
+}
+
+table td:hover {
+  background-color: #f3f3f3;
+}
+
+table a {
+  padding: 10px;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.login {
+  position:absolute;
+  left:50%;
+  top:50%;
+  height:300px;
+  width:325px;
+  margin-top:-150px;
+  margin-left:-162px;
+  text-align: center;
+}
+
+.login img {
+  margin-bottom: 30px;
+}
+
+.login table {
+  border: none;
+  width: 100%;
+}
+
+.login tr {
+  border: none;
+  font-size: 110%;
+}
+
+.login td input{
+  width: 100%;
+  padding: 4px;
+  margin-left: 10px;
+  font-size: 110%;
 }

@@ -1,5 +1,16 @@
-<form name="login" action="" method="post">
-  Username:  <input type="text" name="username" value="" /><br />
-  Password:  <input type="password" name="password" value="" /><br />
-  <input type="submit" name="submit" value="Submit" />
-</form>
+<div class="login">
+	<img alt="Creamy CMS" src="theme/img/creamy.png"></img>
+	<form name="login" action="" method="post">
+		<table>
+			<tr>
+				<td>Username:</td>
+				<td><input type="text" name="username" value="" /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="password" value="" /></td>
+			</tr>
+		</table>
+		<input class="button" type="submit" name="submit" value="Submit" />
+	</form>
+</div>

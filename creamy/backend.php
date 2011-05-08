@@ -38,16 +38,21 @@ class Backend {
   }
 
   /**
-   * Creates a html listing (table, ul,...) containing the provided items.
+   * Creates a html table containing the provided items.
    */
-  private function listing($items, $listtype="table") {
+  private function table($items, $header, $classes=array()) {
     $list = ""; // Create an empty list
+
+    // Create a table header
+    $table_header = $this->html->tag("th", $header);
+    $list .= $this->html->tag("tr", $table_header);
+
     foreach ($items as $item) {
       // Add item to list
       $row = $this->html->tag("td", $item);
-      $list .= $this->html->tag("tr", $row) . "\n";
+      $list .= $this->html->tag("tr", $row);
     }
-    return $this->html->tag($listtype, $list);
+    return $this->html->tag("table" . implode($classes), $list);
   }
 
   /**
@@ -64,14 +69,14 @@ class Backend {
       $link = $this->html->tag("a href='$path'", $name) . "\n"; 
       array_push($links, $link);
     }
-    echo $this->listing($links);
+    echo $this->table($links, "Select a content area to edit", array(".content-list"));
   }
 
   /**
    * Login page
    */
   public function show_login() {
-    $this->show_part("header", array("title" => "Login | Creamy"));
+    $this->show_part("header", array("title" => "Login"));
     $this->show_part("login");
     $this->show_part("footer");
   }
@@ -80,7 +85,7 @@ class Backend {
    * Admin page
    */
   public function show_backend() {
-    $this->show_part("header", array("title" => "Administration | Creamy"));
+    $this->show_part("header", array("title" => "Administration"));
     $this->show_part("menu", array("user" => $_SESSION['username']));
     $this->list_contents();
     $this->show_part("footer");
