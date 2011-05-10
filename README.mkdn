@@ -23,11 +23,19 @@ A file-based content management system as simple as Perch.
 
 ## FAQ
 
-Q: Why not use perch?
+#### Q: Why not use perch instead?  
 A: Creamy is free software. You can modify it to your heart's content.
 Furthermore it's file based. That means you can manage and backup your
 site with a text editor and version control and make diffs to see changes.
 You don't need a database to run it.
+
+#### Q: Who might want to use it?  
+A: Creamy is ideal for small web pages.  
+It doesn't get into your way and helps you get some dynamic elements
+into otherwise static pages real quick. 
+You can create a simple template and publish content in no time.
+Hackers can also use source control software like git or svn and a plain
+text editor to manage sites.
 
 ## Extensions
 

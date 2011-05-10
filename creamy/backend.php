@@ -37,6 +37,10 @@ class Backend {
     echo $template->Display();
   }
 
+  public function msg_box($string) {
+    print($this->html->tag("div.box", $string)); 
+  }
+
   /**
    * Creates a html table containing the provided items.
    */
@@ -69,7 +73,7 @@ class Backend {
       $link = $this->html->tag("a href='$path'", $name) . "\n"; 
       array_push($links, $link);
     }
-    echo $this->table($links, "Select a content area to edit", array(".content-list"));
+    print($this->table($links, "Select a content area to edit", array(".content-list")));
   }
 
   /**
@@ -86,9 +90,9 @@ class Backend {
    */
   public function show_backend() {
     $this->show_part("header", array("title" => "Administration"));
-    $this->show_part("menu", array("user" => $_SESSION['username']));
+    $this->show_part("menu");
     $this->list_contents();
-    $this->show_part("footer");
+    $this->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
   }
 }
 ?>

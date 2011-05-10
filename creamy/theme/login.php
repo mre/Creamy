@@ -10,7 +10,10 @@
 				<td>Password:</td>
 				<td><input type="password" name="password" value="" /></td>
 			</tr>
+      <tr>
+        <td></td>
+        <td><input class="button" type="submit" name="submit" value="Submit" /></td>
+      </tr>
 		</table>
-		<input class="button" type="submit" name="submit" value="Submit" />
 	</form>
 </div>

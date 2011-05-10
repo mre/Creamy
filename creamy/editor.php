@@ -4,7 +4,6 @@ session_start();
 require_once("backend.php");
 require_once("file.php");
 
-    print $_POST["post-text"];
 // Check if file has been modified
 if (isset($_POST["submit"])) {
     $file = $_SESSION["file"];
@@ -16,11 +15,10 @@ if (isset($_POST["submit"])) {
     }
 
     $backend = new Backend();
-    $backend->show_part("header", array("title" => "Saved file '" . $file . "' | Creamy"));
-    $backend->show_part("menu", array("user" => $_SESSION['username']));
-    print($status);
-    print("<a href='index.php'>Back</a>");
-    $backend->show_part("footer");
+    $backend->show_part("header", array("title" => "Saved file '" . $file));
+    $backend->show_part("menu");
+    $backend->msg_box($status . "<a href='index.php'>Go back</a>.");
+    $backend->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
 
 } else {
 
@@ -32,13 +30,13 @@ if (isset($_POST["submit"])) {
     $_SESSION["file"] = $file;
 
     $content = File::read($file);
-    $status = "Editing file " . $file;
 
     $backend = new Backend();
     $backend->show_part("header", array("title" => $status));
-    $backend->show_part("menu", array("user" => $_SESSION['username'], "status" => $status));
+    $backend->show_part("menu");
+    $backend->msg_box("You are editing $file. When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
     $backend->show_part("edit", array("content" => $content));
-    $backend->show_part("footer");
+    $backend->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
   }
 }
 

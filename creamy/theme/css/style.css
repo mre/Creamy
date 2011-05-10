@@ -32,13 +32,12 @@ a {
 
 .head {
   width: 100%;
-  padding: 10px;
   margin-bottom: 20px;
-  border-bottom: red 1px solid;
+  border-bottom: red 2px solid;
 }
 
-.menu {
-  width: 100%;
+.head img {
+  margin-right: 20px;
 }
 
 .menu li{
@@ -46,11 +45,21 @@ a {
   float: left;
   list-style: none;
   list-style-type: none;
-  padding: 20px;
+  padding: 5px;
+  margin-top:25px;
 }
 
-.menu a {
-  padding: 5px;
+.menu li a {
+  background-color: White;
+  font-size: 120%;
+  padding: 7px 14px 7px 14px;
+  border: 2px red solid;
+  border-bottom: none;
+  text-decoration: none;
+}
+
+.menu li a:hover {
+  background-color: WhiteSmoke;
 }
 
 .centered {
@@ -142,18 +151,14 @@ table tr {
   border: 1px solid red;
 }
 
-table td {
-}
-
-table td:hover {
-  background-color: #f3f3f3;
-}
-
 table a {
   padding: 10px;
   display: block;
   height: 100%;
-  width: 100%;
+}
+
+table a:hover {
+  background-color: WhiteSmoke;
 }
 
 .login {
@@ -182,8 +187,19 @@ table a {
 }
 
 .login td input{
-  width: 100%;
   padding: 4px;
   margin-left: 10px;
   font-size: 110%;
+}
+
+.login td input:hover{
+  background-color: WhiteSmoke;
+}
+
+.box {
+  background-color: LightYellow;
+  background-image: url("../img/info.gif");
+  background-repeat: no-repeat;
+  background-position: 20px 10px;
+  padding: 10px 10px 10px 50px;
 }
