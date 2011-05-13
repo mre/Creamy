@@ -21,9 +21,9 @@ class Backend {
   /**
    * Show part of page using the provided template file.
    */
-  public function show_part($template_file, $values = array()) {
+  private function part($template_file, $values = array(), $theme_dir) {
     // Construct template name
-    $template_name = $template_file . Config::$template_extension;
+    $template_name = $_SERVER["DOCUMENT_ROOT"] . "/" . $theme_dir . "/" . $template_file . Config::$template_extension;
 
     // Load template
     $template = new Template($template_name);
@@ -35,6 +35,20 @@ class Backend {
 
     // Show output
     echo $template->Display();
+  }
+
+  /**
+   * Wrapper method. Show part of backend.
+   */
+  public function show_backend_part($template_file, $values = array()) {
+    $this->part($template_file, $values, Config::$creamy_theme_dir);
+  }
+
+  /**
+   * Wrapper method. Show part of custom theme.
+   */
+  public function show_part($template_file, $values = array()) {
+    $this->part($template_file, $values, Config::$theme_dir);
   }
 
   public function msg_box($string) {
@@ -80,19 +94,19 @@ class Backend {
    * Login page
    */
   public function show_login() {
-    $this->show_part("header", array("title" => "Login"));
-    $this->show_part("login");
-    $this->show_part("footer");
+    $this->show_backend_part("header", array("title" => "Login"));
+    $this->show_backend_part("login");
+    $this->show_backend_part("footer");
   }
 
   /**
    * Admin page
    */
   public function show_backend() {
-    $this->show_part("header", array("title" => "Administration"));
-    $this->show_part("menu");
+    $this->show_backend_part("header", array("title" => "Administration"));
+    $this->show_backend_part("menu");
     $this->list_contents();
-    $this->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
+    $this->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
   }
 }
 ?>

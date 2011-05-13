@@ -12,20 +12,19 @@ class Config {
   );
 
   // Advanced configuration.
-  // You don't need to edit this.
+  // You might not need to edit this.
 
   // Extension for content files
   static $extension = ".mkdn";
 
   // Using plain php files for templates
-  static $template_extension = ".php"; 
+  static $template_extension = ".php";
 
-  // Extension for html parts (like header, footer...)
-  static $part_extension = ".html";
-
-  // Paths
+  // Internal paths relative to server root. 
+  // Change only if you know what you are doing.
+  static $theme_dir = "theme";
   static $creamy_dir = "creamy";
-  static $theme_dir  = "theme";
-}
+  static $creamy_theme_dir = "creamy/theme";
 
+} 
 ?>

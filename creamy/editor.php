@@ -15,10 +15,10 @@ if (isset($_POST["submit"])) {
     }
 
     $backend = new Backend();
-    $backend->show_part("header", array("title" => "Saved file '" . $file));
-    $backend->show_part("menu");
+    $backend->show_backend_part("header", array("title" => "Saved file '" . $file));
+    $backend->show_backend_part("menu");
     $backend->msg_box($status . "<a href='index.php'>Go back</a>.");
-    $backend->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
+    $backend->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
 
 } else {
 
@@ -32,11 +32,11 @@ if (isset($_POST["submit"])) {
     $content = File::read($file);
 
     $backend = new Backend();
-    $backend->show_part("header", array("title" => $status));
-    $backend->show_part("menu");
+    $backend->show_backend_part("header", array("title" => $status));
+    $backend->show_backend_part("menu");
     $backend->msg_box("You are editing $file. When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
-    $backend->show_part("edit", array("content" => $content));
-    $backend->show_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
+    $backend->show_backend_part("edit", array("content" => $content));
+    $backend->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
   }
 }
 

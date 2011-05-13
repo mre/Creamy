@@ -64,15 +64,17 @@
       protected $iCacheLength;
       protected $oCache = null;
 
+      /*
       private function GetTemplatePath() {
          $root = File::path(".");
          $relative_path =  "/" . Config::$theme_dir;
          return ($root . "/" . $relative_path . "/");
-      } 
+      } */
 
       public function __construct($sTemplate, $iCacheLength = TEMPLATE_CACHE_LENGTH, $bDebug = TEMPLATE_DEBUG) {
          $this->sTemplate = $sTemplate;
-         $this->sTemplatePath = $this->GetTemplatePath(); 
+         // $this->sTemplatePath = $this->GetTemplatePath(); 
+         $this->sTemplatePath = "";
          $this->bDebug = $bDebug;
          $this->bCacheSupport = class_exists('PhpCache');
          $this->iCacheLength = $iCacheLength;
