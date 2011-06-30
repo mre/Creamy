@@ -6,6 +6,13 @@
 class File {
 
   /**
+   * Check if a file exists.
+   */
+  public static function exists($filename) {
+    return (file_exists($filename));
+  }
+
+  /**
    * Read raw file content.
    */
   public static function read($filename) {
@@ -29,14 +36,38 @@ class File {
   /**
    * Write raw file content.
    */
-  public static function write($filename, $content) {
-    $f = fopen($filename, 'w');
+  public static function write($filename, $content, $mode='a') {
+    $f = fopen($filename, $mode);
     if($f != null) {
       fwrite($f, $content);
       fclose($f);
       return true;
     }
     return false;
+  }
+
+  /**
+   * Remove a file.
+   */
+  public static function remove($filename) {
+    if (file_exists($filename)) {
+      unlink($filename);
+      return true;
+    } else {
+      // File does not exist. Nothing to delete.
+      return false;
+    }
+  }
+
+  public static function sanitized($filename, $stripExtension = true) {
+      // Remove server root path
+      $root = $_SERVER["DOCUMENT_ROOT"];
+      $file = str_replace($root . "/", "", $filename);
+      if ($stripExtension) {
+        // Remove file extension
+        $file = substr($file, 0,strrpos($file, '.'));
+      }
+      return $file;
   }
 
   /**

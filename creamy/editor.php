@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+require_once("config.php");
 require_once("backend.php");
 require_once("file.php");
 
@@ -24,7 +25,8 @@ if (isset($_POST["submit"])) {
 
   // Read file that should be edited
   if (isset($_GET["file"])) {
-    $file = $_GET["file"];
+    $filename = $_GET["file"];
+    $file = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir . "/" . $filename;
 
     // Store file that will be edited in session
     $_SESSION["file"] = $file;
@@ -32,8 +34,10 @@ if (isset($_POST["submit"])) {
     $content = File::read($file);
 
     $backend = new Backend();
+    $status = "Editing file " . $file;
     $backend->show_backend_part("header", array("title" => $status));
     $backend->show_backend_part("menu");
+
     $backend->msg_box("You are editing $file. When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
     $backend->show_backend_part("edit", array("content" => $content));
     $backend->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));

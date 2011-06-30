@@ -52,14 +52,19 @@ a {
 .menu li a {
   background-color: White;
   font-size: 120%;
-  padding: 7px 14px 7px 14px;
+  padding: 7px 14px;
   border: 2px red solid;
   border-bottom: none;
   text-decoration: none;
 }
 
 .menu li a:hover {
-  background-color: WhiteSmoke;
+  /*border-top: 7px red solid;*/
+  padding: 10px 14px 7px 14px;
+}
+
+.head .button {
+  margin-top: 20px;
 }
 
 .centered {
@@ -137,6 +142,7 @@ a {
 
 table {
   border: 1px solid red;
+  margin-bottom: 20px;
 }
 
 table th {
@@ -202,4 +208,5 @@ table a:hover {
   background-repeat: no-repeat;
   background-position: 20px 10px;
   padding: 10px 10px 10px 50px;
+  margin-bottom: 10px;
 }

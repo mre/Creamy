@@ -7,6 +7,7 @@
 			<li><a href="index.php">Content</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>
 		</ul>
+    <a class="button right" href="/">Visit Site</a>
 		<div class="clear"></div>
 	</div>
 </div>

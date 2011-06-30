@@ -9,7 +9,7 @@ require_once("creamy/backend.php");
 // Check if backend got called.
 if(!Creamy::is_included()) {
   // Redirect to backend
-  header("Location: creamy/");
+  header("Location: " . Config::$creamy_dir);
 }
 
 /**

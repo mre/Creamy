@@ -74,20 +74,59 @@ class Backend {
   }
 
   /**
+   * Delete th index of editable content areas.
+   */
+  public function remove_contents_file() {
+    // Remove old contents file if it exists.
+    File::remove(Config::$contents_file);
+  }
+
+  /**
+   * Create an index of editable content areas.
+   */
+  private function create_contents_file() {
+    // Recursively find all content files in main folder 
+    $root = $_SERVER["DOCUMENT_ROOT"];
+    $search_dir = $root . Config::$page_dir;
+    $contents = File::find("/" . Config::$extension . "/", $search_dir);
+    foreach ($contents as $content_area) {
+      File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
+    }
+  }
+
+  /**
+   * Get the list of editable content areas.
+   */
+  private function parse_contents_file() {
+    if (!File::exists(Config::$contents_file)) {
+      // Recreate contents file.
+      $this->msg_box("Refreshed the list of editable content areas.");
+      $this->create_contents_file();
+    }
+
+    // Load list of content areas
+    $contents = File::read(Config::$contents_file);
+    return $contents;
+  }
+
+  /**
    * Shows a list of all editable content of a page.
    */
   private function list_contents() {
-    // Find all content files in main folder 
-    $contents = File::find("/" . Config::$extension . "/", "..");
-
+    // Load content information
+    $raw_contents = $this->parse_contents_file();
+    // Content areas are separated by newline
+    $contents = preg_split("[\n|\r]", $raw_contents);
+    //basename("/etc/sudoers.d", ".d")
     // Create the links
     $links = array();
-    foreach ( $contents as $name => $path ) {
-      $path = "editor.php?file=" . $path;
-      $link = $this->html->tag("a href='$path'", $name) . "\n"; 
+    foreach ( $contents as $content_area ) {
+      $path = "editor.php?file=" . $content_area . Config::$extension;
+      $link = $this->html->tag("a href='$path'", $content_area) . "\n"; 
       array_push($links, $link);
     }
     print($this->table($links, "Select a content area to edit", array(".content-list")));
+    print($this->html->tag("a.button href='index.php?reload=1'", "Refresh list"));
   }
 
   /**

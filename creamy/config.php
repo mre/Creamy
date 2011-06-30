@@ -20,11 +20,15 @@ class Config {
   // Using plain php files for templates
   static $template_extension = ".php";
 
-  // Internal paths relative to server root. 
+  // Internal settings.
   // Change only if you know what you are doing.
-  static $theme_dir = "theme";
-  static $creamy_dir = "creamy";
-  static $creamy_theme_dir = "creamy/theme";
 
-} 
+  // Paths relative to server root.
+  static $page_dir = ""; // Location of page on server (leave blank if root)
+  static $theme_dir = "theme"; // Place for custom theme files
+  static $creamy_dir = "creamy"; // Home of creamy on server
+  static $creamy_theme_dir = "creamy/theme"; // Internal theme
+
+  static $contents_file = "contents.txt";
+}
 ?>
