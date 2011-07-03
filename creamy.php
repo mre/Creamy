@@ -3,7 +3,7 @@
 // Load necessary classes.
 require_once("creamy/config.php");
 require_once("creamy/file.php");
-require_once("creamy/markdown/markdown.php");
+require_once("creamy/lib/markdown/markdown.php");
 require_once("creamy/backend.php");
 
 // Check if backend got called.

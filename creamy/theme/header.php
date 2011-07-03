@@ -11,10 +11,10 @@
 <meta name="distribution" content="global" />
 <title><?=$title?> | Creamy</title>
 <link rel="icon" href="favicon.ico" type="image/ico" />
-<link rel="stylesheet" type="text/css" href="wmd/wmd.css" />
+<link rel="stylesheet" type="text/css" href="lib/wmd/wmd.css" />
 <link rel="stylesheet" type="text/css" href="theme/css/style.css" />
 
 </head>
 <body>
 <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
-<script type="text/javascript" src="wmd/showdown.js"></script>
+<script type="text/javascript" src="lib/wmd/showdown.js"></script>

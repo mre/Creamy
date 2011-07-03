@@ -11,4 +11,4 @@
     <div class="clear"></div>
   </div>
 </form>
-<script type="text/javascript" src="wmd/wmd.js"></script>
+<script type="text/javascript" src="lib/wmd/wmd.js"></script>

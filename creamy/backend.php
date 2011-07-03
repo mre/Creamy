@@ -2,7 +2,7 @@
 
 require_once("config.php");
 require_once("template.php");
-require_once("htmlwriter/lib/phpHtmlWriter.php");
+require_once("lib/htmlwriter/lib/phpHtmlWriter.php");
 
 /**
  * Class for static html content of backend.
