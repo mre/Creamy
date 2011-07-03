@@ -9,7 +9,7 @@ require_once("file.php");
 if (isset($_POST["submit"])) {
     $file = $_SESSION["file"];
     $content = $_POST["post-text"];
-    if (File::write($file, $content)) {
+    if (File::write($file, $content, 'w')) {
       $status = "File written. ";
     } else {
       $status = "An error occured while writing. ";

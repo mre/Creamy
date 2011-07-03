@@ -9,7 +9,7 @@ class User {
    * Check if user is logged in.
    */
   public function logged_in() {
-    if ($_SESSION['username'])
+    if (isset($_SESSION['username']))
       return true;
     else
       return false;

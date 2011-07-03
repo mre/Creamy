@@ -115,9 +115,9 @@ class Backend {
   private function list_contents() {
     // Load content information
     $raw_contents = $this->parse_contents_file();
-    // Content areas are separated by newline
-    $contents = preg_split("[\n|\r]", $raw_contents);
-    //basename("/etc/sudoers.d", ".d")
+    // Content areas are separated by newline (omitting empty lines)
+    $contents = preg_split("[\n|\r]", $raw_contents, -1, PREG_SPLIT_NO_EMPTY);
+
     // Create the links
     $links = array();
     foreach ( $contents as $content_area ) {
@@ -135,7 +135,7 @@ class Backend {
   public function show_login() {
     $this->show_backend_part("header", array("title" => "Login"));
     $this->show_backend_part("login");
-    $this->show_backend_part("footer");
+    $this->show_backend_part("footer", array("loginstatus" => "Not logged in."));
   }
 
   /**
