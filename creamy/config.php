@@ -18,7 +18,7 @@ class Config {
   static $extension = ".mkdn";
 
   // Using plain php files for templates
-  static $template_extension = ".php";
+  static $template_extension = ".html";
 
   // Internal settings.
   // Change only if you know what you are doing.
@@ -26,8 +26,9 @@ class Config {
   // Paths relative to server root.
   static $page_dir = ""; // Location of page on server (leave blank if root)
   static $theme_dir = "theme"; // Place for custom theme files
-  static $creamy_dir = "creamy"; // Home of creamy on server
+  static $creamy_dir = "creamy"; // Home of creamy on server (relative to page dir)
   static $creamy_theme_dir = "creamy/theme"; // Internal theme
+  static $cache = "creamy/cache"; // Path to cache
 
   static $contents_file = "contents.txt";
 }

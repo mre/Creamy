@@ -4,7 +4,8 @@
 require_once("creamy/config.php");
 require_once("creamy/file.php");
 require_once("creamy/lib/markdown/markdown.php");
-require_once("creamy/backend.php");
+require_once 'creamy/lib/twig/Twig/Autoloader.php';
+
 
 // Check if backend got called.
 if(!Creamy::is_included()) {
@@ -13,31 +14,42 @@ if(!Creamy::is_included()) {
 }
 
 /**
- * This is the main class of creamy, a simple content
- * management system in the style of perch. 
+ * This is the main class of creamy, a free and simple content
+ * management system in the style of perch.
  */
 class Creamy {
 
   /**
    * If this function is called from the frontend
-   * it returns the parsed content to the calling page.
+   * it returns the parsed markdown content to the calling page.
    */
-  public static function content($name) {
-    if (self::is_included()) {
+  public static function content($content_area) {
+    if (is_array($content_area)) {
+      self::show_template($content_area);
+    } else if (self::is_included()) {
       // Check if content region is alread initialized.
-      self::init_content($name);
+      self::init_content($content_area);
       // Show content on page.
-      self::show_content($name);
+      self::show_content($content_area);
     }
   }
 
   /**
-   * If this function is called from the frontend
-   * it returns a template.
+   * Load template content
    */
-  public static function theme($name, $values = array()) {
-    $backend = new Backend();
-    $backend->show_part($name, $values);
+  private static function show_template($options) {
+    // Extract theme name to load
+    $theme = $options["theme"] . Config::$template_extension;
+    unset($options["theme"]);
+    // The rest of the options gets passed
+    // to the templating engine
+    Twig_Autoloader::register();
+    $loader = new Twig_Loader_Filesystem(array(Config::$theme_dir));
+    $twig = new Twig_Environment($loader, array(
+      'cache' => $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir . "/" . Config::$cache, // Compilation cache
+    ));
+    $template = $twig->loadTemplate($theme);
+    echo $template->render($options);
   }
 
   /**
@@ -60,7 +72,7 @@ class Creamy {
   /**
    * Present content on page.
    */
-  private static function show_content($name) {
+  public static function show_content($name) {
     $fullname = $name . Config::$extension;
     echo(Markdown(File::read($fullname)));
   }

@@ -10,17 +10,14 @@ if (isset($_POST["submit"])) {
     $file = $_SESSION["file"];
     $content = $_POST["post-text"];
     if (File::write($file, $content, 'w')) {
-      $status = "File written. ";
+      $status = "Saved changes in file " . $file . ".";
     } else {
-      $status = "An error occured while writing. ";
+      $status = "An error occured while writing " . $file . ".";
     }
 
     $backend = new Backend();
-    $backend->show_backend_part("header", array("title" => "Saved file '" . $file));
-    $backend->show_backend_part("menu");
-    $backend->msg_box($status . "<a href='index.php'>Go back</a>.");
-    $backend->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
-
+    $backend->show_message($status);
+    $backend->show_backend();
 } else {
 
   // Read file that should be edited
@@ -35,12 +32,10 @@ if (isset($_POST["submit"])) {
 
     $backend = new Backend();
     $status = "Editing file " . $file;
-    $backend->show_backend_part("header", array("title" => $status));
-    $backend->show_backend_part("menu");
-
-    $backend->msg_box("You are editing $file. When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
-    $backend->show_backend_part("edit", array("content" => $content));
-    $backend->show_backend_part("footer", array("loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
+    //$backend->message("You are editing $file. When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
+    $backend->display("editor", array("title" => $status, 
+      "edit" => $content, 
+      "loginstatus" => "Logged in as " . $_SESSION['username'] . "."));
   }
 }
 
