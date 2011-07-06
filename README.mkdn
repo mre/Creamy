@@ -10,10 +10,10 @@ A file-based content management system as simple as Perch.
 
 2. Upload `creamy.php` and the `creamy` folder to your server.
 
-3. Call creamy within your static pages:
-    `<?php include("creamy.php"); ?>`
+3. Call creamy within your static pages:  
+    `<?php require_once("creamy.php"); ?>`
 
-4. Create a content block (an editable region) wherever you want:
+4. Create a content block (an editable region) wherever you want:  
     `<?php Creamy::content("news"); ?>`
 
 5. Open the backend at `example.com/creamy` and edit the content blocks.
@@ -21,30 +21,49 @@ A file-based content management system as simple as Perch.
    so you can also edit these markdown files directly with your 
    favorite text editor.
 
-## FAQ
+## Advanced options
 
-#### Q: Why not use perch instead?  
-A: Creamy is free software. You can modify it to your heart's content.
-Furthermore it's file based. That means you can manage and backup your
-site with a text editor and version control and make diffs to see changes.
-You don't need a database to run it.
+### Markdown support
 
-#### Q: Who might want to use it?  
-A: Creamy is ideal for small web pages.  
-It doesn't get into your way and helps you get some dynamic elements
-into otherwise static pages real quick. 
-You can create a simple template and publish content in no time.
-Hackers can also use source control software like git or svn and a plain
-text editor to manage sites.
-
-## Extensions
+Content areas (the text files included in your page) can be formatted with [Markdown][1].
+Markdown syntax is easy to learn and makes for great formatting.
 
 ### Themes
 
+Creamy uses twig as a templating engine. 
+It's pretty awesome. There is [lots of documentation][2].
+
 You can put code snippets that you use regularly into a folder called
 `theme` (relative to `creamy.php`). Creamy will recognize all content 
-blocks within this folder automatically. So if you have a file called
-`footer.php` the commmand `<?php Creamy::theme("footer"); ?>` works as expected.
+blocks within this folder automatically. So if you have a template called
+`header.html` you can integrate it like this:  
+  `<?php $header = array("theme" => "header", "title" => "Creamy is awesome!");`  
+  `Creamy::content($header); ?>`
+
+## FAQ
+
+#### Q: Why not use perch instead?
+A: Creamy is free software. You can modify it to your heart's content.
+Furthermore it's file based. You don't need a database to run it.
+
+#### Q: Who might want to use it?
+A: Creamy is ideal for small web pages.
+It doesn't get into your way and helps you get some dynamic elements
+into otherwise static pages real quick.
+You can create a simple template and publish content in no time.
+
+Hackers can also use source control software like git or svn and a plain
+text editor to manage sites.
+
+## Credits
+
+This work relies on fantastic work by lots of creative people.
+
+- twig by Fabien Potencier, Armin Ronacher and others
+- Markdown by John Gruber
+- PHP Markdown by Michel Fortin
+- WMD Editor by John Fraser of AttackLabs,
+  Reverse Engineered by Dana Robinson
 
 ### Plugins (not yet implemented)
 
@@ -60,3 +79,7 @@ http://www.matthias-endler.de
 
 GNU General Public License version 3.  
 See LICENSE.txt for details.
+
+
+[1]: http://daringfireball.net/projects/markdown/
+[2]: http://www.twig-project.org/documentation
