@@ -2,6 +2,7 @@
 
 // Load necessary classes.
 require_once("creamy/config.php");
+require_once("creamy/backend.php");
 require_once("creamy/file.php");
 require_once("creamy/lib/markdown/markdown.php");
 require_once 'creamy/lib/twig/Twig/Autoloader.php';
@@ -24,13 +25,17 @@ class Creamy {
    * it returns the parsed markdown content to the calling page.
    */
   public static function content($content_area) {
+    // Complex theme layout
     if (is_array($content_area)) {
       self::show_template($content_area);
+
+    // Simple content file
     } else if (self::is_included()) {
+      $backend = new Backend();
       // Check if content region is alread initialized.
-      self::init_content($content_area);
+      $backend->init_content($content_area);
       // Show content on page.
-      self::show_content($content_area);
+      $backend->show_content($content_area);
     }
   }
 
@@ -39,17 +44,11 @@ class Creamy {
    */
   private static function show_template($options) {
     // Extract theme name to load
-    $theme = $options["theme"] . Config::$template_extension;
+    $theme = $options["theme"];
     unset($options["theme"]);
-    // The rest of the options gets passed
-    // to the templating engine
-    Twig_Autoloader::register();
-    $loader = new Twig_Loader_Filesystem(array(Config::$theme_dir));
-    $twig = new Twig_Environment($loader, array(
-      'cache' => $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir . "/" . Config::$cache, // Compilation cache
-    ));
-    $template = $twig->loadTemplate($theme);
-    echo $template->render($options);
+
+    $backend = new Backend();
+    $backend->display($theme, $options);
   }
 
   /**
@@ -61,20 +60,6 @@ class Creamy {
     return ( $current_script !=  $this_file );
   }
 
-  /**
-   * If the content file does not exist, create it.
-   */
-  private static function init_content($name) {
-      $fullname = $name . Config::$extension;
-      File::create($fullname);
-  }
-
-  /**
-   * Present content on page.
-   */
-  public static function show_content($name) {
-    $fullname = $name . Config::$extension;
-    echo(Markdown(File::read($fullname)));
-  }
-}
+ 
+ }
 ?>

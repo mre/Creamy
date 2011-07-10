@@ -1,0 +1,34 @@
+{% extends "cms_base.html" %}
+
+{% block menu %}
+<div class="head">
+	<div class="centered">
+		<a href="index.php">
+			<img class="left" alt="Creamy CMS" src="theme/img/creamy.png"></img>
+		</a>
+		<ul class="menu">
+			<li><a href="index.php">Content</a></li>
+			<li><a href="index.php?logout=1">Logout</a></li>
+		</ul>
+    <a class="button right" href="/">Visit Site</a>
+		<div class="clear"></div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<form id="post-form" action="editor.php" method="post">
+  <div class="editor-head">
+    <div id="wmd-button-bar" class="left"></div>
+    <input class="button" id="submit-button" type="submit" name="submit" value="Save"></input>
+  </div>
+  <div class="editor-view">
+    <div class="panel left">
+      <textarea id="wmd-input" name="post-text">{{ edit }}</textarea>
+    </div>
+    <div class="panel right" id="wmd-preview"></div>
+    <div class="clear"></div>
+  </div>
+</form>
+<script type="text/javascript" src="lib/wmd/wmd.js"></script>
+{% endblock %}

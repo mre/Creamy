@@ -1,5 +1,6 @@
 <?php
 
+require_once("config.php");
 require_once("file.php");
 require_once("lib/twig/Twig/Autoloader.php");
 
@@ -21,9 +22,18 @@ class Backend {
    */
   private function init_templating_engine() {
     Twig_Autoloader::register();
-    $loader = new Twig_Loader_Filesystem(array(Config::$theme_dir));
+    $root = $_SERVER["DOCUMENT_ROOT"];
+
+    // Custom themes
+    $theme_dir = $root . "/" . Config::$theme_dir;
+
+    // System themes
+    $creamy_theme_dir = $root . "/" . Config::$creamy_theme_dir;
+
+    // Look for themes in this order: Custom themes, system themes.
+    $loader = new Twig_Loader_Filesystem(array($theme_dir, $creamy_theme_dir));
     // Compilation cache
-    $cache_dir = $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir . "/" . Config::$cache;
+    $cache_dir = $root . "/" . Config::$page_dir . "/" . Config::$cache;
     $twig = new Twig_Environment($loader, array('cache' => $cache_dir));
     return $twig;
   }
@@ -45,7 +55,7 @@ class Backend {
     $search_dir = $root . "/" . Config::$page_dir;
     $contents = File::find("/" . Config::$extension . "/", $search_dir);
     foreach ($contents as $content_area) {
-      File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
+       File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
     }
   }
 
@@ -97,7 +107,7 @@ class Backend {
    * Login page
    */
   public function show_login() {
-    $this->display("login", array("title" => "Login", "loginstatus" => "Not logged in."));
+    $this->display("cms_login", array("title" => "Login", "loginstatus" => "Not logged in."));
   }
 
   /**
@@ -105,19 +115,37 @@ class Backend {
    */
   public function show_backend() {
     $content_areas = $this->get_contents();
-    $this->display("backend", array(
+    $this->display("cms_backend", array(
       'title' => 'Administration',
       'areas' => $content_areas,
-      'loginstatus' => 'Logged in as '. $_SESSION['username'] . '.',
-      'messages' => $this->messages));
+      'loginstatus' => 'Logged in as '. $_SESSION['username'] . '.'));
   }
+
+  /**
+   * If the content file does not exist, create it.
+   */
+  public function init_content($name) {
+      $fullname = $name . Config::$extension;
+      File::create($fullname);
+  }
+
+  /**
+   * Present content on page.
+   */
+  public function show_content($name) {
+    $fullname = $name . Config::$extension;
+    echo(Markdown(File::read($fullname)));
+  }
+
 
   /*
    * Render part of website
    */
   public function display($template_name, $arguments) {
     $template = $this->twig->loadTemplate($template_name . Config::$template_extension);
-    echo $template->render($arguments);
+    // Also show all messages
+    $arguments["messages"] = $this->messages;
+    print($template->render($arguments));
   }
 }
 

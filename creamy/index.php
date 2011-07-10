@@ -13,7 +13,6 @@ $user = new User();
 $user->check_logout();
 $user->check_login();
 
-
 $backend = new Backend();
 
 if ($user->logged_in()) {
@@ -24,6 +23,5 @@ if ($user->logged_in()) {
 } else {
   $backend->show_login();
 }
-
 
 ?>

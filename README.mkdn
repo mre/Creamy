@@ -1,7 +1,7 @@
 Creamy
 ======
 
-A file-based content management system as simple as Perch.
+A delicous, tiny, file-based content management system as simple as Perch.
 
 ## Usage
 
@@ -25,8 +25,8 @@ A file-based content management system as simple as Perch.
 
 ### Markdown support
 
-Content areas (the text files included in your page) can be formatted with [Markdown][1].
-Markdown syntax is easy to learn and makes for great formatting.
+Content areas (the text files included in your page) can be formatted with [Markdown][1].  
+The syntax is easy to learn and makes for great formatting.
 
 ### Themes
 
@@ -41,6 +41,10 @@ blocks within this folder automatically. So if you have a template called
   `Creamy::content($header); ?>`
 
 ## FAQ
+
+#### Q: Why create another CMS?
+A: Because existing solutions were to bloated. I want a lightweight CMS that happily
+adapts to static layouts not the other way round.
 
 #### Q: Why not use perch instead?
 A: Creamy is free software. You can modify it to your heart's content.
@@ -64,11 +68,6 @@ This work relies on fantastic work by lots of creative people.
 - PHP Markdown by Michel Fortin
 - WMD Editor by John Fraser of AttackLabs,
   Reverse Engineered by Dana Robinson
-
-### Plugins (not yet implemented)
-
-Additional functionality can be added by putting a file inside a folder
-named `plugins`. See example plugins for details.
 
 ## Copyright
 
