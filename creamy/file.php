@@ -72,13 +72,11 @@ class File {
   public static function sanitized($file, $stripExtension = true) {
 
       // Remove server root path
-      $prefix = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir ;
+      $prefix = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir . "/";
       if (substr($file, 0, strlen($prefix) ) == $prefix) {
         $file = substr($file, strlen($prefix), strlen($file) );
       }
 
-      // $file = preg_replace('/^' . $prefix . '/', '', $str);
-      // $file = str_replace($prefix . "/", "", $filename);
       if ($stripExtension) {
         // Remove file extension
         $file = substr($file, 0,strrpos($file, '.'));
