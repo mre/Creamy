@@ -32,9 +32,14 @@ class Backend {
 
     // Look for themes in this order: Custom themes, system themes.
     $loader = new Twig_Loader_Filesystem(array($theme_dir, $creamy_theme_dir));
+
     // Compilation cache
-    $cache_dir = $root . "/" . Config::$page_dir . "/" . Config::$cache;
-    $twig = new Twig_Environment($loader, array('cache' => $cache_dir));
+    if (Config::$use_cache) {
+      $cache_dir = $root . "/" . Config::$page_dir . "/" . Config::$cache;
+      $twig = new Twig_Environment($loader, array('cache' => $cache_dir));
+    } else {
+      $twig = new Twig_Environment($loader);
+    }
     return $twig;
   }
 

@@ -73,6 +73,7 @@ class File {
 
       // Remove server root path
       $prefix = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir . "/";
+
       if (substr($file, 0, strlen($prefix) ) == $prefix) {
         $file = substr($file, strlen($prefix), strlen($file) );
       }

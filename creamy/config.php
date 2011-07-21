@@ -23,6 +23,9 @@ class Config {
   // Internal settings.
   // Change only if you know what you are doing.
 
+  // Enable / disable internal template cache
+  static $use_cache = false;
+
   // Paths relative to server root.
   static $page_dir = ""; // Location of page on server (leave blank if root)
   static $theme_dir = "theme"; // Place for custom theme files

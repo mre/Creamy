@@ -102,18 +102,27 @@ a {
 .button { 
   color: #777777; 
   font-size: 1.1em; 
-  padding: 0px 4px 2px 4px; 
   border: 1px solid #CCCCCC; 
   cursor: pointer;
   background-color: WhiteSmoke; 
   color: #333; 
   text-decoration: none;
-  padding: 0px 4px 2px 4px;
+  padding: 2px 6px 4px 6px;
 }
 
 .button:hover { 
   color: black; 
   background-color: white ; 
+}
+
+.icon {
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+}
+
+.refresh {
+  background-image: url("../img/refresh.gif");
 }
 
 .editor-head .button {

@@ -32,7 +32,7 @@ if (isset($_POST["submit"])) {
 
     $backend = new Backend();
     $status = "Editing file " . $file;
-    $backend->show_message("You are editing" . $file .
+    $backend->show_message("You are editing" . File::sanitized($file) .
       ". When you are done, click <i>Save</i> or <a href='index.php'>go back</a> without saving.");
     $backend->display("cms_editor", array("title" => $status, 
       "edit" => $content, 
