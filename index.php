@@ -2,13 +2,10 @@
 <?php require_once("creamy.php"); ?>
 
 <!-- Use dynamic template file and fill in values for the placeholders -->
-<?php 
-  $header = array("theme" => "header", "title" => "Welcome to Creamy");
-  Creamy::content($header);
-?>
+<?php Creamy::theme("header", array("title" => "Creamy. A simple CMS.")); ?>
 
 <!-- Insert an editable content area -->
 <?php Creamy::content("README"); ?>
 
 <!-- Include a static template file without any placeholders for variable content (short version). -->
-<?php Creamy::content(array("theme" => "footer")); ?>
+<?php Creamy::theme("footer"); ?>

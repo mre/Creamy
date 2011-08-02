@@ -17,9 +17,7 @@ A delicous, tiny, file-based content management system as simple as Perch.
     `<?php Creamy::content("news"); ?>`
 
 5. Open the backend at `example.com/creamy` and edit the content blocks.
-   Creamy will put the content inside a `contentblock.mkdn` file
-   so you can also edit these markdown files directly with your 
-   favorite text editor.
+
 
 ## Advanced options
 
@@ -30,20 +28,52 @@ The syntax is easy to learn and makes for great formatting.
 
 ### Themes
 
-Creamy uses twig as a templating engine. 
+#### Templating engine
+
+Creamy uses twig for templating.  
 It's pretty awesome. There is [lots of documentation][2].
 
+#### Code snippets (themes)
+
+Code snippets are common parts of a website which will not be editable 
+by the enduser -- like headers, footers and sidebars.
 You can put code snippets that you use regularly into a folder called
-`theme` (relative to `creamy.php`). Creamy will recognize all content 
-blocks within this folder automatically. So if you have a template called
-`header.html` you can integrate it like this:  
-  `<?php $header = array("theme" => "header", "title" => "Creamy is awesome!");`  
-  `Creamy::content($header); ?>`
+`theme` (relative to `creamy.php`). So if you have a snippet with the
+name `header.html` you can integrate it like this:  
+
+  `<?php Creamy::theme("header"); ?>`
+
+#### Variables
+
+Let's get fancy! You can use variables in your themes and content
+blocks:
+
+Let's say you have a variable named {{ title }} inside a theme file.
+Here is how to fill it with a value:
+`<?php $options = array("title" => "Creamy awesomeness!"); ?>`  
+`<?php Creamy::theme("header", $options); ?>`  
+
+
+Or you might want a different layout (here: table.html) 
+for a content block and also omit markdown support for this block. 
+Here is how to do it:
+`<?php $options = array("layout" => "table", "markdown" = false);`  
+`Creamy::content("events", $options); ?>`  
+
+#### Bare bones content management
+
+By default creamy will recursively find all markdown files in your
+websites subfolder. This means you can manage markdown files from the
+backend without ever using them on your website. This is great for ajax
+content. Say you have a band website and the profile of each band member
+is loaded with an ajax call. Simply put the profiles into separate
+markdown files and manage them with creamy.
+
 
 ## FAQ
 
 #### Q: Why create another CMS?
-A: Because existing solutions were to bloated. I want a lightweight CMS that happily
+A: Because existing solutions were too bloated. I want a lightweight CMS that happily
 adapts to static layouts not the other way round.
 
 #### Q: Why not use perch instead?

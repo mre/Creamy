@@ -57,22 +57,28 @@ class File {
    * Remove a file.
    */
   public static function remove($filename) {
-    if (file_exists($filename)) {
-      unlink($filename);
-      return true;
-    } else {
-      // File does not exist. Nothing to delete.
+    if (!file_exists($filename))
       return false;
-    }
+
+    // File exists. Delete it.
+    if(!@unlink($filename))
+        return false; // Something went wrong.
+
+    // File deleted.
+    return true;
   }
 
   /**
-   * Get relative path to file
+   * Get relative path to file and remove file extension
    */
   public static function sanitized($file, $stripExtension = true) {
 
       // Remove server root path
       $prefix = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir . "/";
+
+      // Remove duplicate path separators.
+      $prefix = str_replace("//","/",$prefix);
+      $file = str_replace("//","/", $file);
 
       if (substr($file, 0, strlen($prefix) ) == $prefix) {
         $file = substr($file, strlen($prefix), strlen($file) );

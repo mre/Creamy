@@ -11,28 +11,30 @@ class Config {
     'user2'=>'pass2'
   );
 
+  ////////////////////
   // Advanced configuration.
   // You might not need to edit this.
+  static $extension = ".mkdn"; // Extension for content files
+  static $template_extension = ".html"; // Using plain php files for templates
 
-  // Extension for content files
-  static $extension = ".mkdn";
+  static $page_dir = ""; // Absolute path to page on server (leave blank if root)
+  static $theme_dir = "theme"; // Place for custom theme files (absolute path from server root)
 
-  // Using plain php files for templates
-  static $template_extension = ".html";
-
+  ////////////////////
   // Internal settings.
-  // Change only if you know what you are doing.
-
-  // Enable / disable internal template cache
-  static $use_cache = false;
+  // Change only if you know what you are doing!
 
   // Paths relative to server root.
-  static $page_dir = ""; // Location of page on server (leave blank if root)
-  static $theme_dir = "theme"; // Place for custom theme files
-  static $creamy_dir = "creamy"; // Home of creamy on server (relative to page dir)
+  static $creamy_dir = "creamy"; // Home of creamy on server
   static $creamy_theme_dir = "creamy/theme"; // Internal theme
   static $cache = "creamy/cache"; // Path to cache
 
-  static $contents_file = "contents.txt";
+  static $use_cache = false; // Enable / disable internal template cache
+  static $contents_file = "contents.txt"; // Store the list of editable contents inside this file
+  static $defaults = array(   // Advanced options for content areas.
+    "layout"   => "",         // Default layout for content area
+    "markdown" => true        // Markdown support for content areas
+  );
+
 }
 ?>

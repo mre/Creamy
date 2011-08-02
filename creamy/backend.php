@@ -48,18 +48,22 @@ class Backend {
    */
   public function remove_contents_file() {
     // Remove old contents file if it exists.
-    File::remove(Config::$contents_file);
+    if (!File::remove(Config::$contents_file))
+      $this->show_message("Something went wrong while deleting the content index file. "
+      . "Please check file permissions for <code>" . Config::$contents_file . "</code>.");
   }
 
   /**
    * Create an index of editable content areas.
    */
   private function create_contents_file() {
-    // Recursively find all content files in main folder 
+    // Recursively find all content files in main folder
     $root = $_SERVER["DOCUMENT_ROOT"];
     $search_dir = $root . "/" . Config::$page_dir;
     $contents = File::find("/" . Config::$extension . "/", $search_dir);
+
     foreach ($contents as $content_area) {
+      $content_area = str_replace("//","/",$content_area);
        File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
     }
   }
@@ -142,11 +146,10 @@ class Backend {
     echo(Markdown(File::read($fullname)));
   }
 
-
   /*
    * Render part of website
    */
-  public function display($template_name, $arguments) {
+  public function display($template_name, array $arguments) {
     $template = $this->twig->loadTemplate($template_name . Config::$template_extension);
     // Also show all messages
     $arguments["messages"] = $this->messages;
