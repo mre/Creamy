@@ -1,7 +1,8 @@
-Creamy
-======
+![Creamy][Logo]
 
-A delicous, tiny, file-based content management system as simple as Perch.
+# Creamy
+
+A delicously tiny content management system as simple as perch.
 
 ## Usage
 
@@ -24,26 +25,22 @@ A delicous, tiny, file-based content management system as simple as Perch.
 ### Markdown support
 
 Content areas (the text files included in your page) can be formatted with [Markdown][1].  
-The syntax is easy to learn and makes for great formatting.
+The syntax is easy to learn and makes for great formatting (you can also
+disable Markdown support altogether).
 
-### Themes
-
-#### Templating engine
+### Templating engine
 
 Creamy uses twig for templating.  
 It's pretty awesome. There is [lots of documentation][2].
 
-#### Code snippets (themes)
+### Themes
 
-Code snippets are common parts of a website which will not be editable 
-by the enduser -- like headers, footers and sidebars.
-You can put code snippets that you use regularly into a folder called
-`theme` (relative to `creamy.php`). So if you have a snippet with the
-name `header.html` you can integrate it like this:  
+Themes are common parts of a website which will not be editable -- like headers, footers and sidebars.
+Put them into a folder called `theme` (relative to `creamy.php`).
+You can now use it on any page like this:  
+`<?php Creamy::theme("header"); ?>`
 
-  `<?php Creamy::theme("header"); ?>`
-
-#### Variables
+### Variables
 
 Let's get fancy! You can use variables in your themes and content
 blocks:
@@ -53,32 +50,40 @@ Here is how to fill it with a value:
 `<?php $options = array("title" => "Creamy awesomeness!"); ?>`  
 `<?php Creamy::theme("header", $options); ?>`  
 
-
 Or you might want a different layout (here: table.html) 
-for a content block and also omit markdown support for this block. 
-Here is how to do it:
+for a content block and also omit markdown support for this block.  
+Here is how to do it:  
 `<?php $options = array("layout" => "table", "markdown" = false);`  
 `Creamy::content("events", $options); ?>`  
 
-#### Bare bones content management
+### Metadata
 
-By default creamy will recursively find all markdown files in your
-websites subfolder. This means you can manage markdown files from the
-backend without ever using them on your website. This is great for ajax
-content. Say you have a band website and the profile of each band member
-is loaded with an ajax call. Simply put the profiles into separate
-markdown files and manage them with creamy.
+You can place metadata at the head of every markdown file like this:
+
+    author: Oscar Wilde
+    year: 1883
+    title: Personal Impressions of America (Leadville)
+    ---
+    Over the piano was printed a notice:  
+    Please do not shoot the pianist. He is doing his best.
+
+The first three lines are interpreted as metadata and can be used in
+your templates like any other variable: {{ author }}
 
 
 ## FAQ
 
-#### Q: Why create another CMS?
-A: Because existing solutions were too bloated. I want a lightweight CMS that happily
-adapts to static layouts not the other way round.
+#### Q: A CMS...oh really? Why don't you use one of the gazillion other systems?
+A: I want a lightweight CMS that happily adapts to static layouts not the other way round.
 
 #### Q: Why not use perch instead?
-A: Creamy is free software. You can modify it to your heart's content.
+A: Creamy is free software. You can modify it to your hearts content.
 Furthermore it's file based. You don't need a database to run it.
+
+#### Q: Why not use yekyll instead?
+A: I love jekyll. I use it for my own blog but it's cumbersome to
+configure and has no admin backend for my clients. You can think of creamy as a
+user-friendly jekyll clone.
 
 #### Q: Who might want to use it?
 A: Creamy is ideal for small web pages.
@@ -91,13 +96,14 @@ text editor to manage sites.
 
 ## Credits
 
-This work relies on fantastic work by lots of creative people.
+This piece of software relies on fantastic work by lots of creative people.
 
-- twig by Fabien Potencier, Armin Ronacher and others
-- Markdown by John Gruber
-- PHP Markdown by Michel Fortin
-- WMD Editor by John Fraser of AttackLabs,
+- [twig][3] by Fabien Potencier, Armin Ronacher and others
+- [Markdown][4] by John Gruber
+- [PHP Markdown][5] by Michel Fortin
+- [WMD Editor][6] by John Fraser of AttackLabs,
   Reverse Engineered by Dana Robinson
+- [spyc][7] by Chris Wanstrath and Vlad Andersen
 
 ## Copyright
 
@@ -109,6 +115,12 @@ http://www.matthias-endler.de
 GNU General Public License version 3.  
 See LICENSE.txt for details.
 
+[Logo]: https://github.com/mre/Creamy/raw/master/creamy/theme/img/creamy.png
 
 [1]: http://daringfireball.net/projects/markdown/
 [2]: http://www.twig-project.org/documentation
+[3]: http://twig-project.org/
+[4]: http://daringfireball.net/projects/markdown/
+[5]: http://michelf.com/projects/php-markdown/
+[6]: https://github.com/derobins/wmd
+[7]: http://spyc.sourceforge.net
