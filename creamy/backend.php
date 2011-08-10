@@ -2,19 +2,22 @@
 
 require_once("config.php");
 require_once("file.php");
+require_once("indexer.php");
 require_once("lib/twig/Twig/Autoloader.php");
+require_once("lib/markdown/markdown.php");
+require_once("messagehandler.php");
+require_once("metadata.php");
 
 class Backend {
 
   private $twig; // Templating engine
-  private $messages; // Messages to user from interface
-
   /**
    * Instantiate the backend.
    */
   public function __construct() {
     $this->twig = $this->init_templating_engine();
-    $this->messages = array();
+    $this->indexer = new Indexer();
+    $this->messagehandler = MessageHandler::getInstance();
   }
 
   /**
@@ -47,103 +50,198 @@ class Backend {
    * Delete index of editable content areas.
    */
   public function remove_contents_file() {
-    // Remove old contents file if it exists.
-    if (!File::remove(Config::$contents_file))
-      $this->show_message("Something went wrong while deleting the content index file. "
-      . "Please check file permissions for <code>" . Config::$contents_file . "</code>.");
-  }
-
-  /**
-   * Create an index of editable content areas.
-   */
-  private function create_contents_file() {
-    // Recursively find all content files in main folder
-    $root = $_SERVER["DOCUMENT_ROOT"];
-    $search_dir = $root . "/" . Config::$page_dir;
-    $contents = File::find("/" . Config::$extension . "/", $search_dir);
-
-    foreach ($contents as $content_area) {
-      $content_area = str_replace("//","/",$content_area);
-       File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
-    }
-  }
-
-  /**
-   * Get the list of editable content areas.
-   */
-  private function parse_contents_file() {
-    if (!File::exists(Config::$contents_file)) {
-      // Recreate contents file.
-      //$this->msg_box("Refreshed the list of editable content areas.");
-      $this->create_contents_file();
-    }
-
-    // Load list of content areas
-    $contents = File::read(Config::$contents_file);
-    return $contents;
-  }
-
-  /**
-   * Shows a list of all editable content of a page.
-   */
-  private function get_contents() {
-    // Load content information
-    $raw_contents = $this->parse_contents_file();
-    // Content areas are separated by newline (omitting empty lines)
-    $contents = preg_split("[\n|\r]", $raw_contents, -1, PREG_SPLIT_NO_EMPTY);
-
-    // Create the links
-    $links = array();
-    foreach ( $contents as $content_area ) {
-      $area = array(
-        "name" => $content_area,
-        "link" => "editor.php?file=" . $content_area . Config::$extension
-      );
-      array_push($links, $area);
-    }
-    return $links;
-  }
-
-
-  /**
-   * The backend holds a list of messages that will be displayed on demand.
-   */
-  public function show_message($message) {
-    array_push($this->messages, $message);
+    $this->indexer->remove_contents_file();
   }
 
   /**
    * Login page
    */
   public function show_login() {
-    $this->display("cms_login", array("title" => "Login", "loginstatus" => "Not logged in."));
+    $options = array("title" => "Login", "loginstatus" => "Not logged in.");
+    $this->display("cms_login", $options);
   }
 
   /**
    * Admin page
    */
   public function show_backend() {
-    $content_areas = $this->get_contents();
-    $this->display("cms_backend", array(
-      'title' => 'Administration',
-      'areas' => $content_areas,
-      'loginstatus' => 'Logged in as '. $_SESSION['username'] . '.'));
+    if (isset($_GET["dir"])) {
+      $listing = $this->listing_content_area($_GET["dir"]);
+    } else {
+      $listing = $this->listing_overview();
+    }
+    $this->display("cms_backend", $listing);
   }
 
   /**
-   * If the content file does not exist, create it.
+   * Get an overview of all content areas.
    */
-  public function init_content($name) {
+  private function listing_overview() {
+    $listing = array();
+    $listing["title"]  = "Dashboard";
+    $listing["desc"]   = "Select content area to edit";
+    $listing["areas"]  = $this->indexer->get_content_overview();
+    $listing["buttons"] = array(
+      array("name" => "Refresh list", "link" => "index.php?refresh=1", "icon" => "refresh"));
+    return $listing;
+  }
+
+
+  /**
+   * Get all entries for a specific content area
+   */
+  private function listing_content_area($dir) {
+    $listing = array();
+    $listing["title"] = $dir;
+    $listing["desc"]  = "Entries in " . $dir . ":";
+    $posts = $this->indexer->get_posts($dir);
+
+    $meta = $this->indexer->get_dir_metadata($dir);
+    if (isset($meta["layout"])) {
+      foreach ($posts as $post) {
+        $post["link"] .= "?layout" . $post["metadata"]["layout"];
+      }
+      $layoutpart = "&layout=" . $meta["layout"];
+    } else {
+      $layoutpart = "";
+    }
+    $listing["areas"] = $posts;
+    if(empty($listing["areas"])) {
+      $this->messagehandler->show("Create your first post by clicking on <em>New entry</em> below.");
+    }
+
+    if (isset($meta["id"])) {
+      $next_id = $meta["id"];
+    } else {
+      $next_id = 1;
+    }
+    $new_file = $dir . "/" . $next_id . Config::$extension;
+
+    // Button to create new entry.
+    $button_new = array("name" => "New entry", 
+      "link" => "editor.php?file=" . $new_file . "&new=true" . $layoutpart, "icon" => "new");
+    // Button to go back to overview
+    $button_back = array("name" => "Back", "link" => "index.php", "icon" => "back");
+
+    $listing["buttons"] = array($button_back, $button_new);
+
+    return $listing;
+  }
+
+  /**
+   * Show content on frontend.
+   */
+  public function show_content($name, $options = array()) {
+    if ($options["multi"]) {
+      $this->show_multi($name, $options);
+    } else {
       $fullname = $name . Config::$extension;
-      File::create($fullname);
+      $raw = File::read($fullname);
+      if ($options["markdown"])
+        echo(Markdown($raw));
+      else
+        echo($raw);
+    }
   }
 
   /**
-   * Present content on page.
+   * Show multiple contents (i.e. posts) at once
    */
-  public function show_content($name) {
-    $fullname = $name . Config::$extension;
-    echo(Markdown(File::read($fullname)));
+  private function show_multi($name, $options = array()) {
+    // Load contents from this directory
+    $dir = $name . Config::$multi_content_suffix;
+
+    // Show archive of content entries?
+    // if ($options["archive"]) {}
+
+    // Check for single content id
+    // if ($options["id"]) { ... }
+
+    // Otherwise show a bunch of current entries
+    $this->paginate($dir, $options);
+  }
+
+  /**
+   * Show requested entries of content area
+   */
+  private function paginate($dir, $options) {
+    // How many entries per page?
+    $limit = $options["limit"];
+    // Which page?
+    $page = $options["page"] > 0 ? $options["page"] : 1;
+    // Calculate first entry to show
+    $offset = ($page - 1) * $limit;
+    // Find entries in content dir
+    $patterns = array("/" . Config::$extension . "/");
+    $entries = File::find($patterns, $dir);
+    // Select the requested entries
+    $requested = array_slice($entries, $offset, $limit);
+
+    $this->show_entries($requested, $options);
+  }
+
+  /**
+   * Process a bunch of requested entries of a content area.
+   */
+  private function show_entries($entries, $options = array()) {
+    // All entries will be collected and sent to the templating engine
+    // afterwards if a layout is given.
+    $posts = array();
+
+    // Show each entry on frontend
+    foreach($entries as $entry) {
+      $raw = File::read($entry);
+
+      // Split raw input into metadata and content
+      $data = explode(Config::$metadata_separator, $raw, 2);
+      if (count($data) > 1) {
+        // Extract metadata
+        $entry = Metadata::read($data[0]);
+        $entry["text"] = $data[1];
+      } else {
+        // No metadata
+        $entry = array();
+        $entry["text"] = $data[0];
+      }
+
+      $truncate_length = $options["truncate"];
+      if ($truncate_length > 0) {
+        $entry["text"] = $this->truncate($entry["text"], $truncate_length);
+      }
+
+      if ($options["markdown"])
+        $entry["text"] = Markdown($entry["text"]);
+
+      // Show layout?
+      if(empty($options["layout"])) {
+        // Nope. Direct output.
+        echo $entry["text"];
+      } else {
+        // Store for later
+        array_push($posts, $entry);
+      }
+    }
+    if(!empty($options["layout"])) {
+      // Send to templating engine
+      $vars = array();
+      $vars["posts"] = $posts;
+      $vars["options"] = $options;
+      $this->display($options["layout"], $vars);
+    }
+  }
+
+  /**
+   * Get a smaller part of a long text
+   */
+  private function truncate($text, $limit) {
+    if ($limit < 2) return $text;
+
+    if (strlen($text) > $limit) {
+      $words = str_word_count($text, 2);
+      $pos = array_keys($words);
+      $text = substr($text, 0, $pos[$limit]) . '...';
+    }
+    return $text;
   }
 
   /*
@@ -152,9 +250,10 @@ class Backend {
   public function display($template_name, array $arguments) {
     $template = $this->twig->loadTemplate($template_name . Config::$template_extension);
     // Also show all messages
-    $arguments["messages"] = $this->messages;
+    $arguments["messages"] = $this->messagehandler->messages;
+    if (isset($_SESSION["username"]))
+      $arguments["loginstatus"] = 'Logged in as '. $_SESSION['username'] . '.';
     print($template->render($arguments));
   }
 }
-
 ?>

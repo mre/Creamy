@@ -10,7 +10,6 @@
 			<li><a href="index.php">Content</a></li>
 			<li><a href="index.php?logout=1">Logout</a></li>
 		</ul>
-    <a class="button right" href="/">Visit Site</a>
 		<div class="clear"></div>
 	</div>
 </div>
@@ -18,12 +17,21 @@
 
 {% block content %}
 <form id="post-form" action="editor.php" method="post">
-  <div class="editor-head">
+  <div class="submenu">
+    <div class="left">
+    <a href="index.php" class="button back icon ">Back</a>
+    <input class="button save icon" id="submit-button" type="submit" name="submit" value="Save"></input>
+    </div>
     <div id="wmd-button-bar" class="left"></div>
-    <input class="button" id="submit-button" type="submit" name="submit" value="Save"></input>
+    <div class="clear"></div>
   </div>
   <div class="editor-view">
     <div class="panel left">
+      <div class="metadata">
+        {% for variable in metadata %}
+          <input type=text" name="{{ variable }}" value="{{ variable | capitalize }}"</input>
+        {% endfor %}
+      </div>
       <textarea id="wmd-input" name="post-text">{{ edit }}</textarea>
     </div>
     <div class="panel right" id="wmd-preview"></div>

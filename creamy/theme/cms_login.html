@@ -1,5 +1,5 @@
-{% extends "cms_base.html" %}
-{% block content %}
+{% include "cms_header.html" %}
+
 <div class="login">
 	<img alt="Creamy CMS" src="theme/img/creamy.png"></img>
 	<form name="login" action="" method="post">
@@ -19,4 +19,5 @@
 		</table>
 	</form>
 </div>
-{% endblock %}
+
+{% include "cms_footer.html" %}

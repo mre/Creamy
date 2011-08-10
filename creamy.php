@@ -4,8 +4,6 @@
 require_once("creamy/config.php");
 require_once("creamy/backend.php");
 require_once("creamy/file.php");
-require_once("creamy/lib/markdown/markdown.php");
-require_once 'creamy/lib/twig/Twig/Autoloader.php';
 
 
 // Check if backend got called.
@@ -24,11 +22,18 @@ class Creamy {
    * Return the parsed markdown content to the calling page.
    */
   public static function content($content_area, array $options = array()) {
-    $backend = new Backend();
+
+    // Check for additional parameters via GET
+    $url_params = self::get_parameters();
+    // Merge with options passed by frontend and defaults
+    $options = array_merge(Config::$default_options, $url_params, $options);
+
     // Check if content region is alread initialized.
-    $backend->init_content($content_area);
+    $indexer = new Indexer();
+    $indexer->init_content($content_area, $options);
     // Show content on page.
-    $backend->show_content($content_area);
+    $backend = new Backend();
+    $backend->show_content($content_area, $options);
   }
 
   /**
@@ -37,6 +42,17 @@ class Creamy {
   public static function theme($theme_name, array $options = array()) {
     $backend = new Backend();
     $backend->display($theme_name, $options);
+  }
+
+  /**
+   * Extract GET parameters from the current url.
+   */
+  private static function get_parameters() {
+    if(!empty($_GET)) {
+      return $_GET;
+    } else {
+      return array();
+    }
   }
 
   /**

@@ -14,10 +14,10 @@ A delicously tiny content management system as simple as perch.
 3. Call creamy within your static pages:  
     `<?php require_once("creamy.php"); ?>`
 
-4. Create a content block (an editable region) wherever you want:  
+4. Create a content area (an editable region) wherever you want:  
     `<?php Creamy::content("news"); ?>`
 
-5. Open the backend at `example.com/creamy` and edit the content blocks.
+5. Open the backend at `example.com/creamy` and edit the content area.
 
 
 ## Advanced options
@@ -43,7 +43,7 @@ You can now use it on any page like this:
 ### Variables
 
 Let's get fancy! You can use variables in your themes and content
-blocks:
+areas:
 
 Let's say you have a variable named {{ title }} inside a theme file.
 Here is how to fill it with a value:
@@ -51,7 +51,7 @@ Here is how to fill it with a value:
 `<?php Creamy::theme("header", $options); ?>`  
 
 Or you might want a different layout (here: table.html) 
-for a content block and also omit markdown support for this block.  
+for a content area and also omit markdown support for this area.  
 Here is how to do it:  
 `<?php $options = array("layout" => "table", "markdown" = false);`  
 `Creamy::content("events", $options); ?>`  
@@ -68,8 +68,12 @@ You can place metadata at the head of every markdown file like this:
     Please do not shoot the pianist. He is doing his best.
 
 The first three lines are interpreted as metadata and can be used in
-your templates like any other variable: {{ author }}
+your templates like this:  
 
+    {% for post in posts %}
+      {{ post.title }}, written by {{ post.author }} in {{ post.year }}:
+      {{ post.text }}
+    {% endfor %}
 
 ## FAQ
 
@@ -104,6 +108,7 @@ This piece of software relies on fantastic work by lots of creative people.
 - [WMD Editor][6] by John Fraser of AttackLabs,
   Reverse Engineered by Dana Robinson
 - [spyc][7] by Chris Wanstrath and Vlad Andersen
+- [Wireframe mono icons][8] by Gentleface.com
 
 ## Copyright
 
@@ -124,3 +129,4 @@ See LICENSE.txt for details.
 [5]: http://michelf.com/projects/php-markdown/
 [6]: https://github.com/derobins/wmd
 [7]: http://spyc.sourceforge.net
+[8]: http://gentleface.com/free_icon_set.html

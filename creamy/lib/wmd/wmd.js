@@ -2078,7 +2078,9 @@ Attacklab.wmdBase = function(){
 			command.wrap(chunk, wmd.wmd_env.lineLength - 2);
 			chunk.selection = chunk.selection.replace(/^/gm, "> ");
 			replaceBlanksInTags(true);
-			chunk.addBlankLines();
+      //Chrome bugfix
+      //http://meta.osqa.net/questions/6544/is-wmd-tested-for-chrome
+			//chunk.addBlankLines();
 		}
 		else{
 			chunk.selection = chunk.selection.replace(/^[ ]{0,3}> ?/gm, "");
@@ -2261,7 +2263,9 @@ Attacklab.wmdBase = function(){
 			});
 			
 		chunk.trimWhitespace(true);
-		chunk.addBlankLines(nLinesBefore, nLinesAfter, true);
+    //Fix for Chrome bug described on 
+    //http://meta.osqa.net/questions/6544/is-wmd-tested-for-chrome
+		//chunk.addBlankLines(nLinesBefore, nLinesAfter, true);
 		chunk.startTag = prefix;
 		var spaces = prefix.replace(/./g, " ");
 		command.wrap(chunk, wmd.wmd_env.lineLength - spaces.length);

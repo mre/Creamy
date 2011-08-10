@@ -1,37 +1,41 @@
 {% extends "cms_base.html" %}
 
 {% block menu %}
-<div class="head">
-	<div class="centered">
-		<a href="index.php">
-			<img class="left" alt="Creamy CMS" src="theme/img/creamy.png"></img>
-		</a>
-		<ul class="menu">
-			<li><a href="index.php">Content</a></li>
-			<li><a href="index.php?logout=1">Logout</a></li>
-		</ul>
-    <a class="button right" href="/">Visit Site</a>
-		<div class="clear"></div>
-	</div>
-</div>
+  <div class="head">
+    <div class="centered">
+      <a href="index.php">
+        <img class="left" alt="Creamy CMS" src="theme/img/creamy.png"></img>
+      </a>
+      <ul class="menu">
+        <li><a href="index.php">Content</a></li>
+        <li><a href="index.php?logout=1">Logout</a></li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
-<table class="content-list">
-  <thead>
-    <tr>
-      <th>Select a content area to edit</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for area in areas %}
-      <tr>
-        <td>
-          <a href='{{ area.link }}'>{{ area.name }}</a>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<a class="button refresh icon" href="index.php?reload=1">Refresh</a>
+  {% if areas %}
+    <table class="content-list">
+      <thead>
+        <tr>
+          <th>{{ desc }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in areas %}
+          <tr>
+            <td>
+              {% if area.is_dir %}
+                <a class="multi entry" href='index.php?dir={{ area.link }}'>{{ area.name }}</a>
+              {% else %}
+                <a class="single entry" href='editor.php?file={{ area.link }}{% if area.metadata %}&layout={{ area.metadata.layout }}{% endif %}'>{{ area.name }}</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 {% endblock %}

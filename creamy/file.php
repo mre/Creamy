@@ -16,7 +16,8 @@ class File {
    * Read raw file content.
    */
   public static function read($filename) {
-    $content = ""; 
+    $content = "";
+    $filename = self::sanitize_path($filename);
 
     // File must exist
     if(!file_exists($filename))
@@ -40,10 +41,19 @@ class File {
     return strtolower(realpath($file));
   }
 
+
+  /**
+   * Remove double slashes from path.
+   */
+  public static function sanitize_path($path) {
+    return str_replace("//","/", $path);
+  }
+
   /**
    * Write raw file content.
    */
   public static function write($filename, $content, $mode='a') {
+    $filename = self::sanitize_path($filename);
     $f = fopen($filename, $mode);
     if($f != null) {
       fwrite($f, $content);
@@ -69,26 +79,55 @@ class File {
   }
 
   /**
+   * Remove matches of regular expressions from a string
+   */
+  public static function strip(array $patterns, $string) {
+    foreach ($patterns as $pattern) {
+      $string = preg_replace($pattern, "", $string);
+    }
+    return $string;
+  }
+
+  /**
    * Get relative path to file and remove file extension
    */
-  public static function sanitized($file, $stripExtension = true) {
+  public static function sanitized($path, $stripExtension = true) {
 
       // Remove server root path
       $prefix = $_SERVER["DOCUMENT_ROOT"] . Config::$page_dir . "/";
 
       // Remove duplicate path separators.
       $prefix = str_replace("//","/",$prefix);
-      $file = str_replace("//","/", $file);
+      $path = str_replace("//","/", $path);
 
-      if (substr($file, 0, strlen($prefix) ) == $prefix) {
-        $file = substr($file, strlen($prefix), strlen($file) );
+      if (substr($path, 0, strlen($prefix) ) == $prefix) {
+        $path = substr($path, strlen($prefix), strlen($path) );
       }
 
       if ($stripExtension) {
         // Remove file extension
-        $file = substr($file, 0,strrpos($file, '.'));
+        $path = self::remove_extension($path);
       }
-      return $file;
+      return $path;
+  }
+
+  function remove_extension($path) {
+    $parts = pathinfo($path);
+    if (isset($parts["extension"])) {
+      $ext = $parts["extension"];
+      return substr($path, 0, -strlen($ext) - 1);
+    }
+    return $path;
+  }
+
+  /**
+   * Create a new directory if it does not exist.
+   */
+  public static function create_dir($dir) {
+    if (!file_exists($dir)) {
+      // Create empty dir
+      mkdir($dir);
+    }
   }
 
   /**
@@ -105,35 +144,73 @@ class File {
   /**
    * Recursively scan a directory for files that match a pattern.
    * Returns an associative array of (relative) paths.
+   *
+   * @param $pattern    Search pattern (regular expression)
+   * @param $path       The path to the directory that will be scanned.
+   * @param $filtered   Filtered directories that will not be scanned.
+   *
+   * @return $matches   Search results
    */
-  public static function find($pattern, $path = ".") {
-    // Normalize file path
-    $path = rtrim(str_replace("\\", "/", $path), '/') . '/';
-
+  public static function find(array $patterns, $path = ".", $filtered = array()) {
+    $path = rtrim(str_replace("\\", "/", $path), '/') . '/'; // Normalize file path
+    $entries = self::read_dir($path); // All files inside path
     $matches = Array(); // Files that match the pattern
-    $entries = Array(); // Files inside a directory
 
+    // Check each file if it matches the pattern
+    foreach ($entries as $entry) {
+      // Check if directory should be omitted
+      if (in_array($entry, $filtered)) continue;
+      if ($entry == '.' || $entry == '..') continue;
+
+      $fullname = $path . $entry;
+
+      if (self::is_matching($patterns, $entry)) {
+          // We've got a match. Store and continue
+          $matches[$entry] = $fullname;
+          continue;
+      } else {
+        // No match.
+        if (is_dir($fullname)) // Search recursively inside subdirectory
+          $matches = array_merge(self::find($patterns, $fullname), $matches);
+      }
+    }
+    return $matches;
+  }
+
+  /**
+   * Check if a string matches a list of given patterns
+   */
+  public static function is_matching(array $patterns, $string) {
+    foreach ($patterns as $pattern) {
+      if (preg_match($pattern, $string))
+        return true;
+    }
+    // No match
+    return false;
+  }
+
+  /**
+   * Get the parent directory of a string.
+   * E.g. if the input is "/this/long/path" it will return "path"
+   */
+  public static function parent_dir($path) {
+    $pathinfo = pathinfo($path, PATHINFO_DIRNAME);
+    $pathinfo = array_filter( explode('/', $pathinfo) );
+    $result = array_pop($pathinfo);
+    return $result;
+  }
+
+  /**
+   * Read directory
+   */
+  public static function read_dir($path) {
     // Read directory
     $dir = dir($path);
     while (false !== ($entry = $dir->read())) {
       $entries[] = $entry;
     }
     $dir->close();
-
-    // Check each file if it matches the pattern
-    foreach ($entries as $entry) {
-      $fullname = $path . $entry;
-      if ($entry != '.' && $entry != '..' && is_dir($fullname)) {
-        // Search recursively inside subdirectory
-        $matches = array_merge(self::find($pattern, $fullname), $matches);
-      } else if (is_file($fullname) && preg_match($pattern, $entry)) {
-          // Found a file that matches the given pattern
-          // Store as "entry" -> "path"
-          $path_parts = pathinfo($entry);
-          $matches[$path_parts['filename']] = $fullname;
-      }
-    }
-    return $matches;
+    return $entries;
   }
 }
 ?>

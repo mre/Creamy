@@ -9,10 +9,8 @@ class User {
    * Check if user is logged in.
    */
   public function logged_in() {
-    if (isset($_SESSION['username']))
-      return true;
-    else
-      return false;
+    if (isset($_SESSION['username'])) return true;
+    else return false;
   }
 
   /**
@@ -23,7 +21,7 @@ class User {
       return; // No login process
 
     // Login process. Check user credentials.
-    $password = Config::$userinfo[$_POST['username']];
+    $password = @Config::$userinfo[$_POST['username']];
     if ($password != '' && $password == $_POST['password']) {
       // session_regenerate_id();
       $_SESSION['username'] = $_POST['username']; // Valid login

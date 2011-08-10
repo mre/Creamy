@@ -16,7 +16,7 @@ $user->check_login();
 $backend = new Backend();
 
 if ($user->logged_in()) {
-  if (isset($_GET["reload"])) {
+  if (isset($_GET["refresh"])) {
     $backend->remove_contents_file();
   }
   $backend->show_backend();

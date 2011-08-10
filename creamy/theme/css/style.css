@@ -104,7 +104,7 @@ a {
   font-size: 1.1em; 
   border: 1px solid #CCCCCC; 
   cursor: pointer;
-  background-color: WhiteSmoke; 
+  background-color: #ededed; 
   color: #333; 
   text-decoration: none;
   padding: 2px 6px 4px 6px;
@@ -121,8 +121,34 @@ a {
   background-position: 5px 5px;
 }
 
-.refresh {
+.button.save {
+  background-image: url("../img/save.gif");
+}
+
+.button.cancel {
+  background-image: url("../img/cancel.gif");
+}
+
+.button.back {
+  background-image: url("../img/back.gif");
+}
+
+.button.refresh {
   background-image: url("../img/refresh.gif");
+}
+
+.button.new {
+  background-image: url("../img/new.gif");
+}
+
+.entry {
+  padding-left: 25px;
+  background-repeat: no-repeat;
+  background-position: 5px 12px;
+}
+
+.multi {
+  background-image: url("../img/expand.gif");
 }
 
 .editor-head .button {
@@ -211,6 +237,12 @@ table a:hover {
   background-color: WhiteSmoke;
 }
 
+.submenu {
+  background-color: #ccc;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 10px;
+}
+
 .box {
   background-color: LightYellow;
   background-image: url("../img/info.gif");
@@ -218,4 +250,33 @@ table a:hover {
   background-position: 20px 10px;
   padding: 10px 10px 10px 50px;
   margin-bottom: 10px;
+}
+
+.wmd-button {
+  background-image: url("../img/wmd-buttons.png");
+}
+
+#wmd-button-row {
+  position: relative;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  margin-top: 7px;
+  padding: 0px;
+}
+
+#wmd-preview {
+  font-size: 80%;
+}
+
+.panel .metadata {
+  padding-right: 16px;
+  margin-bottom: 2px;
+}
+.panel input {
+  font-size: 110%;
+  width: 100%;
+  padding: 10px;
+  background-color: WhiteSmoke;
+  border: none;
 }
