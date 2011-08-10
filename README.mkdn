@@ -47,14 +47,17 @@ areas:
 
 Let's say you have a variable named {{ title }} inside a theme file.
 Here is how to fill it with a value:
-`<?php $options = array("title" => "Creamy awesomeness!"); ?>`  
-`<?php Creamy::theme("header", $options); ?>`  
+
+    <?php $options = array("title" => "Creamy awesomeness!"); ?>
+    <?php Creamy::theme("header", $options); ?>
 
 Or you might want a different layout (here: table.html) 
 for a content area and also omit markdown support for this area.  
 Here is how to do it:  
-`<?php $options = array("layout" => "table", "markdown" = false);`  
-`Creamy::content("events", $options); ?>`  
+    <?php 
+      $options = array("layout" => "table", "markdown" = false);
+      Creamy::content("events", $options);
+    ?>
 
 ### Metadata
 
