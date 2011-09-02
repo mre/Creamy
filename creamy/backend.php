@@ -7,6 +7,7 @@ require_once("lib/twig/Twig/Autoloader.php");
 require_once("lib/markdown/markdown.php");
 require_once("messagehandler.php");
 require_once("metadata.php");
+include("lib/common/stringfunctions.php");
 
 class Backend {
 
@@ -86,7 +87,6 @@ class Backend {
     return $listing;
   }
 
-
   /**
    * Get all entries for a specific content area
    */
@@ -96,11 +96,13 @@ class Backend {
     $listing["desc"]  = "Entries in " . $dir . ":";
     $posts = $this->indexer->get_posts($dir);
 
-    $meta = $this->indexer->get_dir_metadata($dir);
+
+    // Absolute path on server
+    $root = $_SERVER["DOCUMENT_ROOT"];
+    $absolute_dir = $root . "/" . $dir;
+    $meta = $this->indexer->get_dir_metadata($absolute_dir);
+
     if (isset($meta["layout"])) {
-      foreach ($posts as $post) {
-        $post["link"] .= "?layout" . $post["metadata"]["layout"];
-      }
       $layoutpart = "&layout=" . $meta["layout"];
     } else {
       $layoutpart = "";
@@ -155,7 +157,7 @@ class Backend {
     // if ($options["archive"]) {}
 
     // Check for single content id
-    // if ($options["id"]) { ... }
+    //if (@$options["id"]) { ... }
 
     // Otherwise show a bunch of current entries
     $this->paginate($dir, $options);
@@ -184,9 +186,16 @@ class Backend {
    * Process a bunch of requested entries of a content area.
    */
   private function show_entries($entries, $options = array()) {
+
+    if (empty($entries)) {
+      $this->display("cms_404", array("error" => "No posts with this index"));
+      return;
+    }
+
     // All entries will be collected and sent to the templating engine
     // afterwards if a layout is given.
     $posts = array();
+    $truncate_length = $options["truncate"];
 
     // Show each entry on frontend
     foreach($entries as $entry) {
@@ -203,12 +212,9 @@ class Backend {
         $entry = array();
         $entry["text"] = $data[0];
       }
-
-      $truncate_length = $options["truncate"];
       if ($truncate_length > 0) {
-        $entry["text"] = $this->truncate($entry["text"], $truncate_length);
+        $entry["text"] = truncate($entry["text"], $truncate_length);
       }
-
       if ($options["markdown"])
         $entry["text"] = Markdown($entry["text"]);
 
@@ -221,6 +227,7 @@ class Backend {
         array_push($posts, $entry);
       }
     }
+
     if(!empty($options["layout"])) {
       // Send to templating engine
       $vars = array();
@@ -228,20 +235,6 @@ class Backend {
       $vars["options"] = $options;
       $this->display($options["layout"], $vars);
     }
-  }
-
-  /**
-   * Get a smaller part of a long text
-   */
-  private function truncate($text, $limit) {
-    if ($limit < 2) return $text;
-
-    if (strlen($text) > $limit) {
-      $words = str_word_count($text, 2);
-      $pos = array_keys($words);
-      $text = substr($text, 0, $pos[$limit]) . '...';
-    }
-    return $text;
   }
 
   /*

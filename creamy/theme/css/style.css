@@ -125,8 +125,34 @@ a {
   background-image: url("../img/save.gif");
 }
 
-.button.cancel {
-  background-image: url("../img/cancel.gif");
+
+.del { 
+  color: #777777; 
+  font-size: 1.1em; 
+  cursor: pointer;
+  text-decoration: none;
+  margin-top:5px;
+  padding: 2px 6px 4px 25px;
+  color: gray; 
+  background-color: white ; 
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+  background-image: url("../img/delete.gif");
+  width: 100%; 
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  -moz-opacity:0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+}
+
+.del:hover {
+  color: black;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  -moz-opacity:1.0;
+  -khtml-opacity: 1.0;
+  opacity: 1.0;
 }
 
 .button.back {
@@ -145,6 +171,10 @@ a {
   padding-left: 25px;
   background-repeat: no-repeat;
   background-position: 5px 12px;
+}
+
+.entry:hover {
+  background-color: WhiteSmoke;
 }
 
 .multi {
@@ -196,10 +226,6 @@ table a {
   padding: 10px;
   display: block;
   height: 100%;
-}
-
-table a:hover {
-  background-color: WhiteSmoke;
 }
 
 .login {

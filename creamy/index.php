@@ -19,6 +19,12 @@ if ($user->logged_in()) {
   if (isset($_GET["refresh"])) {
     $backend->remove_contents_file();
   }
+  if (isset($_GET["delete"])) {
+    if (isset($_GET["file"])) {
+      $root = $_SERVER["DOCUMENT_ROOT"];
+      File::remove($root . "/" . $_GET["file"]);
+    }
+  }
   $backend->show_backend();
 } else {
   $backend->show_login();

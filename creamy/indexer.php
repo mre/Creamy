@@ -10,20 +10,23 @@ class Indexer {
 
   private $metadata_file = METADATA_FILE;
   private $messagehandler;
-  private $page_path; // Root directory
+  private $page_path; // Path to root directory
 
   public function __construct() {
     $this->messagehandler = MessageHandler::getInstance();
     $this->page_path = $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir;
+
+    // Absolute path to contents file
+    $this->contents_file = $this->page_path . "/" . Config::$creamy_dir . "/" . Config::$contents_file;
   }
   /**
    * Delete index of editable content areas.
    */
   public function remove_contents_file() {
     // Remove old contents file if it exists.
-    if (!File::remove(Config::$contents_file))
+    if (!File::remove($this->contents_file))
       $this->messagehandler->show("Something went wrong while deleting the content index file. "
-      . "Please check file permissions for <code>" . Config::$contents_file . "</code>.");
+      . "Please check file permissions for <code>" . $contents_file . "</code>.");
   }
 
   /**
@@ -39,7 +42,7 @@ class Indexer {
     $contents = File::find($patterns, $search_dir);
 
     foreach ($contents as $content_area) {
-      File::write(Config::$contents_file, File::sanitized($content_area) . "\n");
+      File::write($this->contents_file, File::sanitized($content_area) . "\n");
     }
   }
 
@@ -47,14 +50,18 @@ class Indexer {
    * Get the list of editable content areas.
    */
   public function parse_contents_file() {
-    if (!File::exists(Config::$contents_file)) {
+    if (!File::exists($this->contents_file)) {
       // Recreate contents file.
       $this->create_contents_file();
       $this->messagehandler->show("Refreshed the list of editable content areas.");
     }
 
     // Load list of content areas
-    $contents = File::read(Config::$contents_file);
+    $raw_contents = File::read($this->contents_file);
+
+    // Content areas are separated by newline (omitting empty lines)
+    $contents = preg_split("[\n|\r]", $raw_contents, -1, PREG_SPLIT_NO_EMPTY);
+
     return $contents;
   }
 
@@ -63,12 +70,11 @@ class Indexer {
    */
   public function get_content_overview() {
     // Load content information
-    $raw_contents = $this->parse_contents_file();
-    // Content areas are separated by newline (omitting empty lines)
-    $contents = preg_split("[\n|\r]", $raw_contents, -1, PREG_SPLIT_NO_EMPTY);
+    $contents = $this->parse_contents_file();
 
-    // Create the links
+    // Create the links to each content area
     $links = array();
+
     // Cleanup for content area name (remove suffixes)
     $filter = array("/" . Config::$multi_content_suffix . "/");
     foreach ( $contents as $content_area ) {
@@ -102,8 +108,6 @@ class Indexer {
     $pattern = array("/" . Config::$extension . "/");
     $contents = File::find($pattern, $content_dir);
 
-    $dir_metadata = $this->get_dir_metadata($content_area);
-
     // Create the links
     $links = array();
     foreach ( $contents as $content_area ) {
@@ -111,7 +115,7 @@ class Indexer {
       $name = File::strip($pattern, $base);
       $is_dir = false;
       $link = File::sanitized($content_area) . Config::$extension;
-      $area = array("name" => $name, "link" => $link, "is_dir" => $is_dir, "metadata" => $dir_metadata);
+      $area = array("name" => $name, "link" => $link, "is_dir" => $is_dir);
       array_push($links, $area);
     }
     return $links;
@@ -122,46 +126,39 @@ class Indexer {
    */
   public function init_content($name, $options = array()) {
     if ($options["multi"]) {
+      // Multiple entries
       $this->init_content_dir($name, $options);
     } else {
+      // Single entry
       $fullname = $name . Config::$extension;
       File::create($fullname);
     }
-    $this->register($name, $options["layout"]);
   }
 
   public function get_next_file_id($dir) {
     // Read metadata
     $dir_metadata = $this->get_dir_metadata($dir);
-    if (isset($dir_metadata["id"]))
+    if (isset($dir_metadata["id"])) {
       $id = $dir_metadata["id"];
-    else
+    } else {
       $id = 1;
+    }
     return $id;
   }
 
   public function layout($dir) {
     // Read metadata
     $dir_metadata = $this->get_dir_metadata($dir);
-    if (isset($dir_metadata["layout"]))
+    if (isset($dir_metadata["layout"])) {
       return $dir_metadata["layout"];
+    }
     return "";
   }
 
-  private function register($name, $layout) {
-    // Put an entry into the list of content areas.
-    if (!File::exists(Config::$contents_file)) {
-      // Recreate contents file.
-      $this->create_contents_file();
-    } else {
-      // Put a reference to the content area into index file
-      File::write(Config::$contents_file, $name . " " . $layout);
-    }
-  }
-
-  public function get_dir_metadata($dir) {
+  public function get_dir_metadata($metadata_dir) {
     // Read metadata file
-    $metadata_path = $this->page_path . "/" . $dir . "/" . $this->metadata_file. Config::$metadata_extension;
+    $metadata_file = $this->metadata_file. Config::$metadata_extension;
+    $metadata_path = $metadata_dir . "/" . $metadata_file;
     $raw = File::read($metadata_path);
     return Metadata::read($raw);
   }
@@ -171,29 +168,43 @@ class Indexer {
     $dir_metadata = $this->get_dir_metadata($dir);
     // Write new index
     $dir_metadata["id"] = isset($dir_metadata["id"]) ? $dir_metadata["id"]+1 : 1;
-    $metadata_path = $this->page_path . "/" . $dir . "/" . $this->metadata_file. Config::$metadata_extension;
-    $this->create_metadata($metadata_path, $dir_metadata);
+    $this->create_metadata($dir, $dir_metadata);
   }
 
   private function init_content_dir($dir_name, $options = array()) {
     $this->create_content_dir($dir_name);
 
     // Create a file with metadata for our new content area.
-    $metadata = array("layout" => $options["layout"]);
-    $metadata_path = $dir_name . $this->metadata_file . Config::$metadata_extension;
-    $this->create_metadata($metadata_path, $metadata);
+    $metadata_path = $dir_name . Config::$multi_content_suffix;
+    $metadata = array("layout" => $options["layout"], "id" => 1);
+    $this->create_metadata($metadata_path, $metadata, false);
   }
 
+  /**
+   * Create a folder that contains all content entries.
+   */
   private function create_content_dir($name) {
     // Multiple entries (i.e. posts) are possible for this content area.
-    // Therefore we create a folder that contains all entries.
     $content_dir = $name . Config::$multi_content_suffix;
     File::create_dir($content_dir);
   }
 
-  private function create_metadata($metadata_path, $metadata) {
+  /**
+   * Create metadata. Overwrite existing metadata by default.
+   */
+  private function create_metadata($dir, $metadata, $overwrite = true) {
+    // Create metadata
     $yaml = Metadata::create($metadata);
-    File::write($metadata_path, $yaml, 'w');
+
+    // Write metadata
+    $metadata_file = $dir . "/" . $this->metadata_file . Config::$metadata_extension;
+
+    if (File::exists($metadata_file)) {
+      if (!$overwrite) {
+        return;
+      }
+    }
+    File::write($metadata_file, $yaml, 'w');
   }
 }
 

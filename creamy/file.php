@@ -50,6 +50,13 @@ class File {
   }
 
   /**
+   * Check if path starts with a given string
+   */
+  public static function begins_with($string, $search) {
+    return (strncmp($string, $search, strlen($search)) == 0);
+  }
+
+  /**
    * Write raw file content.
    */
   public static function write($filename, $content, $mode='a') {

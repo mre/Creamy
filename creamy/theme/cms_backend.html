@@ -20,19 +20,24 @@
     <table class="content-list">
       <thead>
         <tr>
-          <th>{{ desc }}</th>
+          <th colspan="2">{{ desc }}</th>
         </tr>
       </thead>
       <tbody>
         {% for area in areas %}
           <tr>
-            <td>
-              {% if area.is_dir %}
+            {% if area.is_dir %}
+              <td colspan="2">
                 <a class="multi entry" href='index.php?dir={{ area.link }}'>{{ area.name }}</a>
-              {% else %}
-                <a class="single entry" href='editor.php?file={{ area.link }}{% if area.metadata %}&layout={{ area.metadata.layout }}{% endif %}'>{{ area.name }}</a>
-              {% endif %}
-            </td>
+              </td>
+            {% else %}
+              <td width="95%">
+              <a class="single entry" href='editor.php?file={{ area.link }}{% if area.metadata %}&layout={{ area.metadata.layout }}{% endif %}'>{{ area.name }}</a>
+              </td>
+              <td>
+                <a href="index.php?delete=true&file={{ area.link }}" class="del">Delete</a>
+              </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>

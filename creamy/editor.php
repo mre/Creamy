@@ -7,6 +7,7 @@ require_once("file.php");
 require_once("metadata.php");
 require_once("messagehandler.php");
 require_once("indexer.php");
+include("lib/common/datefunctions.php");
 
 // Handle editor commands
 if (isset($_POST["submit"])) {
@@ -15,8 +16,18 @@ if (isset($_POST["submit"])) {
 
     // Get metadata from post
     $metadata = array();
-    $metadata["title"] = $_POST["title"];
-    $metadata["date"] = $_POST["date"];
+
+    if (isset($_POST["title"]) && $_POST["title"] != "") {
+      $metadata["title"] = $_POST["title"];
+    } else {
+      $metadata["title"] = "No title";
+    }
+
+    if (isset($_POST["date"])) {
+      $metadata["date"] = valid_date($_POST["date"]);
+    } else {
+      $metadata["date"] = date("Y-m-d");
+    }
 
     $content = $_POST["post-text"];
     Editor::save_post($file, $content, $metadata);
@@ -48,7 +59,7 @@ class Editor {
     $new_file = $dir . "/" . $id . "_" . $metadata["title"] . Config::$extension;
     // Put metadata at the beginning of the file
     File::write($new_file, Metadata::create($metadata), 'w');
-    File::write($new_file, Config::$metadata_separator);
+    File::write($new_file, Config::$metadata_separator . "\n");
 
     // Write content below metadata
     if (File::write($new_file, $content)) {
@@ -56,8 +67,7 @@ class Editor {
       // Update file index
       $indexer = new Indexer();
       if (isset($_SESSION["new"]) && $_SESSION["new"] == true) {
-        $content_dir = File::parent_dir($new_file);
-        $indexer->increment_index($content_dir);
+        $indexer->increment_index($dir);
       }
     } else {
       $status = "An error occured while writing " . $file . ".";

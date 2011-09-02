@@ -18,14 +18,14 @@ class Config {
   static $template_extension = ".html"; // Using plain html files for templates
   static $metadata_extension = ".yaml"; // Metadata (like content layout etc.)
 
-  static $page_dir = ""; // Absolute path to page on server (leave blank if it is the root dir)
-  static $theme_dir = "theme"; // Place for custom theme files (absolute path from server root)
+  static $page_dir = ""; // _Absolute_ path to page on server (leave blank if it is the root dir)
+  static $theme_dir = "theme"; // Place for custom theme files (_absolute_ path from server root)
 
   ////////////////////
   // Internal settings.
   // Change only if you know what you are doing!
 
-  // Paths relative to server root.
+  // Paths _relative_ to page directory.
   static $creamy_dir = "creamy";      // Home of creamy on server
   static $creamy_theme_dir = "creamy/theme"; // Internal themes
   static $cache = "creamy/cache";     // Path to cache
@@ -38,7 +38,7 @@ class Config {
     "markdown"  => true,              // Markdown support
     "multi"     => false,             // Multiple entries for each content area by default.
     "truncate"  => 200,               // Number of words in truncated preview text
-    "page"      => 1,                 // Default page id (only for multiple entries)
+    "page"      => 1,                 // First page id (only for multiple entries)
     "limit"     => 4                  // Number of entries on one page
   );
 
