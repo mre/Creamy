@@ -1,9 +1,9 @@
 {# Example layout for a simple blog #}
 
 {% for post in posts %}
-  <em> {{ post.date | date("d.M.Y")}} </em>
+  <em> {{ post.date | date("d.M.Y") }} </em>
   {{ post.author }}
   <h1>{{ post.title | upper }}</h1>
   <br/>
-  {{ post.text |raw }}
+  {{ post.text | raw }}
 {% endfor %}

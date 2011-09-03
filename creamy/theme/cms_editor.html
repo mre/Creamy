@@ -29,7 +29,7 @@
     <div class="panel left">
       <div class="metadata">
         {% for variable in metadata %}
-          <input type=text" name="{{ variable }}" value="{{ variable | capitalize }}"</input>
+          <input type=text" name="{{ variable.key }}" value="{{ variable.value | capitalize }}"</input>
         {% endfor %}
       </div>
       <textarea id="wmd-input" name="post-text">{{ edit }}</textarea>

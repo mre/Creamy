@@ -96,17 +96,23 @@ class Backend {
     $listing["desc"]  = "Entries in " . $dir . ":";
     $posts = $this->indexer->get_posts($dir);
 
-
     // Absolute path on server
     $root = $_SERVER["DOCUMENT_ROOT"];
     $absolute_dir = $root . "/" . $dir;
     $meta = $this->indexer->get_dir_metadata($absolute_dir);
 
     if (isset($meta["layout"])) {
+      // Add metadata on each post.
+      // Directly modify array elements using reference.
+      foreach ($posts as &$post) {
+        $post["metadata"]["layout"] = $meta["layout"];
+      }
+
       $layoutpart = "&layout=" . $meta["layout"];
     } else {
       $layoutpart = "";
     }
+
     $listing["areas"] = $posts;
     if(empty($listing["areas"])) {
       $this->messagehandler->show("Create your first post by clicking on <em>New entry</em> below.");

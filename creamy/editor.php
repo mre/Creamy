@@ -11,25 +11,28 @@ include("lib/common/datefunctions.php");
 
 // Handle editor commands
 if (isset($_POST["submit"])) {
-    // Save file
+    // Save file name
     $file = $_SESSION["file"];
 
-    // Get metadata from post
+    // Get metadata from input fields of layout
     $metadata = array();
-
-    if (isset($_POST["title"]) && $_POST["title"] != "") {
-      $metadata["title"] = $_POST["title"];
-    } else {
-      $metadata["title"] = "No title";
+    foreach ($_SESSION["metadata_fields"] as $field) {
+      if (isset($_POST[$field]) && $_POST[$field] != "") {
+        $metadata[$field] = $_POST[$field];
+      } else {
+        $metadata[$field] = "No " . $field;
+      }
     }
-
-    if (isset($_POST["date"])) {
-      $metadata["date"] = valid_date($_POST["date"]);
-    } else {
-      $metadata["date"] = date("Y-m-d");
-    }
-
     $content = $_POST["post-text"];
+    // Get existing metadata from file.
+    $parts = explode(Config::$metadata_separator, $content, 2);
+    if (count($parts) > 1) {
+      // Some metadata values found. Match with corresponding keys.
+      $metadata_from_file = $parts[0]; // Beginning of file is metadata.
+      $metadata_values = Metadata::read($metadata_from_file); // Create array from metadata
+      $metadata = array_merge($metadata, $metadata_values);
+      $content = $parts[1];         // The rest is content.
+    }
     Editor::save_post($file, $content, $metadata);
 } else {
   // Read file that should be edited
@@ -105,6 +108,9 @@ class Editor {
     return $file;
   }
 
+  /**
+   * Edit a content entry
+   */
   public static function edit($filename) {
     $file = $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir . "/" . $filename;
     $_SESSION["file"] = $file; // Remember filename for saving.
@@ -114,7 +120,35 @@ class Editor {
     // Create some input fields for metadata (like title or date) for the user.
     $metadata = array();
     if (isset($_GET["layout"])) {
-      $metadata = Metadata::get_template_variables($_GET["layout"], self::$metadata_filter);
+      // Extract metadata from template (layout) file.
+      $metadata_keys = Metadata::get_template_variables($_GET["layout"], self::$metadata_filter);
+      $_SESSION["metadata_fields"] = $metadata_keys; // Remember input fields when saving.
+
+      // Get existing metadata from file.
+      $metadata_values = array();
+      $parts = explode(Config::$metadata_separator, $content, 2);
+      if (count($parts) > 1) {
+        // Some metadata values found. Match with corresponding keys.
+        $metadata_from_file = $parts[0]; // Beginning of file is metadata.
+        $metadata_values = Metadata::read($metadata_from_file); // Create array from metadata
+        $content = $parts[1];         // The rest is content.
+      }
+      // Get metadata values for input fields
+      foreach($metadata_keys as $num => $key) {
+        $field = array();
+        $field["key"] = $key;
+        if (array_key_exists($key, $metadata_values)) {
+          $field["value"] = $metadata_values[$key];
+          unset($metadata_values[$key]);
+        } else {
+          $field["value"] = $key;
+        }
+        array_push($metadata, $field);
+      }
+      // Put remaining metadata at beginning of edit area
+      if (count($metadata_values) > 0) {
+        $content = Metadata::create($metadata_values) . Config::$metadata_separator . "\n" . $content;
+      }
     }
 
     $backend = new Backend();
