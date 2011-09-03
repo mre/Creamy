@@ -17,10 +17,11 @@ if (isset($_POST["submit"])) {
     // Get metadata from input fields of layout
     $metadata = array();
     foreach ($_SESSION["metadata_fields"] as $field) {
-      if (isset($_POST[$field]) && $_POST[$field] != "") {
-        $metadata[$field] = $_POST[$field];
+      if (isset($_POST[$field])) {
+        // Check if field has a proper value
+        $metadata[$field] = Metadata::sanitize($field, $_POST[$field]);
       } else {
-        $metadata[$field] = "No " . $field;
+        $metadata[$field] = Metadata::get_default_value($field);
       }
     }
     $content = $_POST["post-text"];
@@ -62,7 +63,7 @@ class Editor {
     $new_file = $dir . "/" . $id . "_" . $metadata["title"] . Config::$extension;
     // Put metadata at the beginning of the file
     File::write($new_file, Metadata::create($metadata), 'w');
-    File::write($new_file, Config::$metadata_separator . "\n");
+    File::write($new_file, Config::$metadata_separator);
 
     // Write content below metadata
     if (File::write($new_file, $content)) {
@@ -141,13 +142,13 @@ class Editor {
           $field["value"] = $metadata_values[$key];
           unset($metadata_values[$key]);
         } else {
-          $field["value"] = $key;
+          $field["value"] = Metadata::get_default_value($key);
         }
         array_push($metadata, $field);
       }
       // Put remaining metadata at beginning of edit area
       if (count($metadata_values) > 0) {
-        $content = Metadata::create($metadata_values) . Config::$metadata_separator . "\n" . $content;
+        $content = Metadata::create($metadata_values) . Config::$metadata_separator . $content;
       }
     }
 

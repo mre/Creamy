@@ -1,0 +1,19 @@
+date: 2011-09-03
+title: Another post
+---Hm...seems to work... 
+
+**seems**
+
+man this is *great* to see
+
+    some code
+    not for the faint of heart
+    believe me...
+
+This is some normal bla bla 
+
+## Awesome heading ##
+###subheading
+####subsub
+
+and so on

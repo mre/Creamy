@@ -1,17 +1,14 @@
 <?php
 
-   // Common string functions
+  // Common string functions
 
   /**
    * Get a smaller part of a long text
    */
-  function truncate($text, $limit) {
-    if ($limit < 2) return $text;
-
+  function truncate($text, $limit = 200, $ellipsis = "...") {
     if (strlen($text) > $limit) {
-      $words = str_word_count($text, 2);
-      $pos = array_keys($words);
-      $text = substr($text, 0, $pos[$limit]) . '...';
+        $text = wordwrap($text, $limit);
+        $text = substr($text, 0, strpos($text, "\n")) . $ellipsis;
     }
     return $text;
   }

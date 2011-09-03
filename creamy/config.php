@@ -37,7 +37,8 @@ class Config {
     "layout"    => "",                // Default layout
     "markdown"  => true,              // Markdown support
     "multi"     => false,             // Multiple entries for each content area by default.
-    "truncate"  => 200,               // Number of words in truncated preview text
+    "truncate"  => 1000,               // Number of words in truncated preview text.
+    "ellipsis"  => "more...",         // Append this string to truncated text.
     "page"      => 1,                 // First page id (only for multiple entries)
     "limit"     => 4                  // Number of entries on one page
   );

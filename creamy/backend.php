@@ -219,7 +219,7 @@ class Backend {
         $entry["text"] = $data[0];
       }
       if ($truncate_length > 0) {
-        $entry["text"] = truncate($entry["text"], $truncate_length);
+        $entry["text"] = truncate($entry["text"], $truncate_length, $options["ellipsis"]);
       }
       if ($options["markdown"])
         $entry["text"] = Markdown($entry["text"]);

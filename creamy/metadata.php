@@ -5,9 +5,17 @@ require_once("lib/twig/Twig/Autoloader.php");
 require_once("lib/spyc/spyc.php");
 require_once("file.php");
 
+define("TODAY", date("Y-m-d"));
+
 class Metadata {
 
   private static $variable_suffix = "post.";
+
+  // Default values and filters for metadata
+  private static $defaults = array(
+    "title" => array("value" => "Title", "check_function" => ""),
+    "date"  => array("value" => TODAY, "check_function" => "valid_date")
+  );
 
   /**
    * Find variable tags in twig templates
@@ -52,6 +60,38 @@ class Metadata {
   public static function create($metadata) {
     $yaml = Spyc::YAMLDump($metadata);
     return $yaml;
+  }
+
+
+  /**
+   * Get the default value for a metadata field.
+   * E.g. return a default value for the field "title"
+   */
+  public static function get_default_value($metadata_field) {
+    if (array_key_exists($metadata_field, self::$defaults)) {
+      $field_defaults = self::$defaults[$metadata_field];
+      if (array_key_exists("value", $field_defaults)) {
+        return $field_defaults["value"];
+      }
+    }
+    return "No " . $metadata_field; // Key does not exist.
+  }
+
+  /**
+   * Run checks on metadata and return a proper value.
+   */
+  public static function sanitize($field, $value) {
+    if (array_key_exists($field, self::$defaults)) {
+      $field_defaults = self::$defaults[$field];
+      if (isset($field_defaults["check_function"]) && $field_defaults["check_function"] != "") {
+        // Run check
+        $valid = call_user_func($field_defaults["check_function"], $value);
+        if (!$valid) {
+          return $field_defaults["value"];
+        }
+      }
+    }
+    return $value;
   }
 
   /**
