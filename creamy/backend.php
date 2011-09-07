@@ -93,7 +93,7 @@ class Backend {
   private function listing_content_area($dir) {
     $listing = array();
     $listing["title"] = $dir;
-    $listing["desc"]  = "Entries in " . $dir . ":";
+    $listing["desc"]  = "Entries in " . prettify($dir, array(Config::$multi_content_suffix)) . ":";
     $posts = $this->indexer->get_posts($dir);
 
     // Absolute path on server
@@ -163,10 +163,12 @@ class Backend {
     // if ($options["archive"]) {}
 
     // Check for single content id
-    //if (@$options["id"]) { ... }
-
-    // Otherwise show a bunch of current entries
-    $this->paginate($dir, $options);
+    if (isset($options["id"])) { 
+      $this->show_entry($options["id"], $dir, $options);
+    } else {
+      // Otherwise show a bunch of current entries
+      $this->paginate($dir, $options);
+    }
   }
 
   /**
@@ -188,6 +190,14 @@ class Backend {
     $this->show_entries($requested, $options);
   }
 
+  private function show_entry($id, $dir, $options = array()) {
+    // Find file with this id
+    $patterns = array("/^" . $id . "_" . ".*" . Config::$extension . "$/");
+    $entries = File::find($patterns, $dir);
+    unset($options["truncate"]);
+    $this->show_entries($entries, $options);
+  }
+
   /**
    * Process a bunch of requested entries of a content area.
    */
@@ -201,11 +211,32 @@ class Backend {
     // All entries will be collected and sent to the templating engine
     // afterwards if a layout is given.
     $posts = array();
-    $truncate_length = $options["truncate"];
 
-    // Show each entry on frontend
+    // Get entries for frontend
     foreach($entries as $entry) {
-      $raw = File::read($entry);
+      $post = $this->get_entry($entry, $options);
+      array_push($posts, $post);
+    }
+    // Show layout?
+    if(empty($options["layout"])) {
+      // Nope. Direct output.
+      foreach ($posts as $post) {
+        echo $entry["text"];
+      }
+    } else {
+      // Send to templating engine
+      $vars = array();
+      $vars["posts"] = $posts;
+      $vars["options"] = $options;
+      $this->display($options["layout"], $vars);
+    }
+  }
+
+  /**
+   * Show a single content entry
+   */
+  private function get_entry($entry_filename, $options) {
+      $raw = File::read($entry_filename);
 
       // Split raw input into metadata and content
       $data = explode(Config::$metadata_separator, $raw, 2);
@@ -218,29 +249,19 @@ class Backend {
         $entry = array();
         $entry["text"] = $data[0];
       }
-      if ($truncate_length > 0) {
-        $entry["text"] = truncate($entry["text"], $truncate_length, $options["ellipsis"]);
+      if (isset($options["truncate"])) {
+        $truncate_length = $options["truncate"];
+        // Link to full content
+        $id = Metadata::get_id_from_filename($entry_filename);
+        $link_url = $_SERVER['PHP_SELF'] . "?id=" . $id;
+        $link = "<a href='" . $link_url . "'>" . Config::$default_options["ellipsis"] . "</a>";
+
+        $entry["text"] = truncate($entry["text"], $truncate_length, $link);
       }
       if ($options["markdown"])
         $entry["text"] = Markdown($entry["text"]);
 
-      // Show layout?
-      if(empty($options["layout"])) {
-        // Nope. Direct output.
-        echo $entry["text"];
-      } else {
-        // Store for later
-        array_push($posts, $entry);
-      }
-    }
-
-    if(!empty($options["layout"])) {
-      // Send to templating engine
-      $vars = array();
-      $vars["posts"] = $posts;
-      $vars["options"] = $options;
-      $this->display($options["layout"], $vars);
-    }
+      return $entry;
   }
 
   /*

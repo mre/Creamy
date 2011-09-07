@@ -55,7 +55,7 @@ class Editor {
   public static function save_post($file, $content, $metadata) {
 
     // Delete old files with the same id
-    $id = self::get_id_from_filename($file);
+    $id = Metadata::get_id_from_filename($file);
     $dir = dirname($file);
     self::delete_id($dir, $id);
 
@@ -91,15 +91,6 @@ class Editor {
     }
   }
 
-  /**
-   * Id from filename
-   */
-  private static function get_id_from_filename($file) {
-    $filename = basename($file);
-    $no_extension = explode("." , $filename);
-    $id = explode("_", $no_extension[0]);
-    return $id[0];
-  }
 
   /**
    * Directory from filename

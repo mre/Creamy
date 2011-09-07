@@ -114,5 +114,15 @@ class Metadata {
     }
     return ""; // Not found
   }
+
+  /**
+   * Id from filename
+   */
+  public static function get_id_from_filename($file) {
+    $filename = basename($file);
+    $no_extension = explode("." , $filename);
+    $id = explode("_", $no_extension[0]);
+    return $id[0];
+  }
 }
 ?>

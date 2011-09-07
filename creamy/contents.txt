@@ -1,2 +1,2 @@
-blog_example/news_content
+blog/news_content
 README

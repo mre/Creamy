@@ -87,7 +87,7 @@ A: I want a lightweight CMS that happily adapts to static layouts not the other 
 A: Creamy is free software. You can modify it to your hearts content.
 Furthermore it's file based. You don't need a database to run it.
 
-#### Q: Why not use yekyll instead?
+#### Q: Why not use jekyll instead?
 A: I love jekyll. I use it for my own blog but it's cumbersome to
 configure and has no admin backend for my clients. You can think of creamy as a
 user-friendly jekyll clone.
