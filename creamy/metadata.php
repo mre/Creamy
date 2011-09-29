@@ -5,7 +5,7 @@ require_once("lib/twig/Twig/Autoloader.php");
 require_once("lib/spyc/spyc.php");
 require_once("file.php");
 
-define("TODAY", date("Y-m-d"));
+define("TODAY", date("Y-m-d")); // Needed for default values array below.
 
 class Metadata {
 
@@ -74,19 +74,25 @@ class Metadata {
         return $field_defaults["value"];
       }
     }
-    return "No " . $metadata_field; // Key does not exist.
+    return "Insert " . $metadata_field; // Key does not exist.
   }
 
   /**
    * Run checks on metadata and return a proper value.
    */
   public static function sanitize($field, $value) {
+    // Check if we have a default value for the field
     if (array_key_exists($field, self::$defaults)) {
+
+      // Load default values and sanity checks for field.
       $field_defaults = self::$defaults[$field];
+
+      // Do we have a sanity check function?
       if (isset($field_defaults["check_function"]) && $field_defaults["check_function"] != "") {
-        // Run check
+        // Run sanity check function
         $valid = call_user_func($field_defaults["check_function"], $value);
         if (!$valid) {
+          // Field value is invalid. Return default.
           return $field_defaults["value"];
         }
       }
@@ -99,8 +105,9 @@ class Metadata {
    */
   private static function get_template_contents($file) {
     // Find file in template directories
-    $custom_themes_dir = Config::$theme_dir;
-    $internal_themes_dir = $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$creamy_theme_dir;
+    $root = $_SERVER["DOCUMENT_ROOT"] . "/";
+    $custom_themes_dir = $root . Config::$theme_dir;
+    $internal_themes_dir =  $root . Config::$creamy_theme_dir;
 
     // Is there a custom template with this name?
     $custom_file = $custom_themes_dir . "/" . $file;
@@ -112,7 +119,7 @@ class Metadata {
     if (file_exists($internal_file)) {
       return file_get_contents($internal_file);
     }
-    return ""; // Not found
+    return ""; // Hmm...no luck.
   }
 
   /**

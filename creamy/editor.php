@@ -60,7 +60,13 @@ class Editor {
     self::delete_id($dir, $id);
 
     // Create new filename
-    $new_file = $dir . "/" . $id . "_" . $metadata["title"] . Config::$extension;
+    if (isset($metadata["title"])) {
+      $title = $metadata["title"];
+    } else {
+      $title = date("Y-m-d");
+    }
+
+    $new_file = $dir . "/" . $id . "_" . $title . Config::$extension;
     // Put metadata at the beginning of the file
     File::write($new_file, Metadata::create($metadata), 'w');
     File::write($new_file, Config::$metadata_separator);

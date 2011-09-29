@@ -1,3 +1,4 @@
-date: 2011-09-07
+date: 2011-09-20
 title: Another post
+stimmung: Verdammt.
 ---Well, try it out.

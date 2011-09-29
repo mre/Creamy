@@ -3,15 +3,19 @@
 require_once("config.php");
 require_once("file.php");
 require_once("messagehandler.php");
+require_once("metadata.php");
 
 define('METADATA_FILE' , "metadata");
 
 class Indexer {
 
-  private $metadata_file = METADATA_FILE;
-  private $messagehandler;
-  private $page_path; // Path to root directory
+  private $metadata_file = METADATA_FILE; // Store metadata inside this file.
+  private $messagehandler; // Show messages on admin page.
+  private $page_path; // Path to root directory.
 
+  /**
+   * Create a new indexer object
+   */
   public function __construct() {
     $this->messagehandler = MessageHandler::getInstance();
     $this->page_path = $_SERVER["DOCUMENT_ROOT"] . "/" . Config::$page_dir;
@@ -19,6 +23,7 @@ class Indexer {
     // Absolute path to contents file
     $this->contents_file = $this->page_path . "/" . Config::$creamy_dir . "/" . Config::$contents_file;
   }
+
   /**
    * Delete index of editable content areas.
    */
@@ -66,13 +71,20 @@ class Indexer {
   }
 
   /**
-   * Shows a list of all editable contents of a page.
+   * Shows a list of all editable contents of the website.
    */
   public function get_content_overview() {
     // Load content information
     $contents = $this->parse_contents_file();
 
-    // Create the links to each content area
+    // Create links for each content area.
+    return $this->create_links($contents);
+  }
+
+  /**
+   * Create a bunch of links.
+   */
+  private function create_links($contents) {
     $links = array();
 
     // Cleanup for content area name (remove suffixes)
@@ -82,8 +94,8 @@ class Indexer {
       $name = File::strip($filter, $base);
 
       // Check if content area can have multiple entries
-      $pos = strpos($base, Config::$multi_content_suffix);
-      if ($pos === false) {
+      $multi = strpos($base, Config::$multi_content_suffix);
+      if ($multi === false) {
         // Simple content area. Single entry.
         $is_dir = false;
         $link = $content_area . Config::$extension;
@@ -135,6 +147,9 @@ class Indexer {
     }
   }
 
+  /**
+   * Every entry has an id. Get the next free one.
+   */
   public function get_next_file_id($dir) {
     // Read metadata
     $dir_metadata = $this->get_dir_metadata($dir);
@@ -146,6 +161,9 @@ class Indexer {
     return $id;
   }
 
+  /**
+   * Get the layout used by a content area
+   */
   public function layout($dir) {
     // Read metadata
     $dir_metadata = $this->get_dir_metadata($dir);
@@ -155,6 +173,9 @@ class Indexer {
     return "";
   }
 
+  /**
+   * Get metadata for content area directory.
+   */
   public function get_dir_metadata($metadata_dir) {
     // Read metadata file
     $metadata_file = $this->metadata_file. Config::$metadata_extension;
@@ -163,6 +184,9 @@ class Indexer {
     return Metadata::read($raw);
   }
 
+  /**
+   * Set the next free file id.
+   */
   public function increment_index($dir) {
     // Get old index
     $dir_metadata = $this->get_dir_metadata($dir);
@@ -171,6 +195,9 @@ class Indexer {
     $this->create_metadata($dir, $dir_metadata);
   }
 
+  /**
+   * Create a directory for all content entries of this content area.
+   */
   private function init_content_dir($dir_name, $options = array()) {
     $this->create_content_dir($dir_name);
 

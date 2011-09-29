@@ -1,2 +1,3 @@
+guestbook/guestbook_content
 blog/news_content
 README

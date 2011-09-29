@@ -20,7 +20,7 @@ A delicously tiny content management system as simple as perch.
 5. Open the backend at `example.com/creamy` and edit the content area.
 
 
-## Advanced options
+## Features
 
 ### Markdown support
 
@@ -84,8 +84,10 @@ your templates like this:
 A: I want a lightweight CMS that happily adapts to static layouts not the other way round.
 
 #### Q: Why not use perch instead?
-A: Creamy is free software. You can modify it to your hearts content.
+A: Creamy is more flexible and it is free software. You can modify it to your hearts content.
 Furthermore it's file based. You don't need a database to run it.
+Also, I personally prefer an erb/mustache/twig-like templating engine
+over the XML-style one that comes with perch.
 
 #### Q: Why not use jekyll instead?
 A: I love jekyll. I use it for my own blog but it's cumbersome to

@@ -211,7 +211,6 @@ class File {
    * Read directory
    */
   public static function read_dir($path) {
-    // Read directory
     $dir = dir($path);
     while (false !== ($entry = $dir->read())) {
       $entries[] = $entry;

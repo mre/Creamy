@@ -138,7 +138,6 @@ a {
   background-repeat: no-repeat;
   background-position: 5px 5px;
   background-image: url("../img/delete.gif");
-  width: 100%; 
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
   -moz-opacity:0.5;
