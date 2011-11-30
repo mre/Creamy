@@ -12,11 +12,13 @@ A delicously tiny content management system as simple as perch.
 2. Upload `creamy.php` and the `creamy` folder to your server.
 
 3. Call creamy within your static pages:  
+
 ```php
 <?php require_once("creamy.php"); ?>
 ```
 
 4. Create a content area (an editable region) wherever you want:  
+
 ```php
 <?php Creamy::content("news"); ?>
 ```
