@@ -12,10 +12,14 @@ A delicously tiny content management system as simple as perch.
 2. Upload `creamy.php` and the `creamy` folder to your server.
 
 3. Call creamy within your static pages:  
-    `<?php require_once("creamy.php"); ?>`
+    ```php
+    <?php require_once("creamy.php"); ?>
+    ```
 
 4. Create a content area (an editable region) wherever you want:  
-    `<?php Creamy::content("news"); ?>`
+    ```php
+    <?php Creamy::content("news"); ?>
+    ```
 
 5. Open the backend at `example.com/creamy` and edit the content area.
 
@@ -38,7 +42,10 @@ It's pretty awesome. There is [lots of documentation][2].
 Themes are common parts of a website which will not be editable -- like headers, footers and sidebars.
 Put them into a folder called `theme` (relative to `creamy.php`).
 You can now use it on any page like this:  
-`<?php Creamy::theme("header"); ?>`
+
+      ```php
+      <?php Creamy::theme("header"); ?>
+      ```
 
 ### Variables
 
@@ -48,16 +55,21 @@ areas:
 Let's say you have a variable named {{ title }} inside a theme file.
 Here is how to fill it with a value:
 
+    ```php
     <?php $options = array("title" => "Creamy awesomeness!"); ?>
     <?php Creamy::theme("header", $options); ?>
+    ```
 
 Or you might want a different layout (here: table.html) 
 for a content area and also omit markdown support for this area.  
 Here is how to do it:  
+
+    ```php
     <?php 
       $options = array("layout" => "table", "markdown" = false);
       Creamy::content("events", $options);
     ?>
+    ```php
 
 ### Metadata
 
@@ -73,10 +85,12 @@ You can place metadata at the head of every markdown file like this:
 The first three lines are interpreted as metadata and can be used in
 your templates like this:  
 
+    ```php
     {% for post in posts %}
       {{ post.title }}, written by {{ post.author }} in {{ post.year }}:
       {{ post.text }}
     {% endfor %}
+    ```
 
 ## FAQ
 
