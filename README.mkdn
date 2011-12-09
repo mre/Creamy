@@ -68,7 +68,7 @@ Here is how to do it:
 
 ```php
 <?php 
-  $options = array("layout" => "table", "markdown" = false);
+  $options = array("layout" => "table", "markdown" => false);
   Creamy::content("events", $options);
 ?>
 ```
