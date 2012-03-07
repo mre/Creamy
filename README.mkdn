@@ -1,8 +1,6 @@
 ![Creamy][Logo]
 
-# Creamy
-
-A delicously tiny content management system as simple as perch.
+A tiny content management system similar to Perch.
 
 ## Usage
 
